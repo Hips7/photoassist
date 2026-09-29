@@ -201,7 +201,21 @@
       if (c.sujet && c.situation) location.hash = lienResultat(styleId, c.sujet, c.situation);
     };
 
+    // Signale d'avance les lumières impossibles pour ce style + sujet
+    function marquerImpossibles() {
+      $vue.querySelectorAll('[data-situation]').forEach(function (b) {
+        var t = c.sujet && trouverRegle(styleId, c.sujet, b.getAttribute('data-situation'));
+        var impossible = !!(t && t.regle.indisponible);
+        b.classList.toggle('impossible', impossible);
+        var note = b.querySelector('.note-impossible');
+        if (impossible && !note) b.insertAdjacentHTML('beforeend', '<em class="note-impossible">Pas adapté à cet effet</em>');
+        if (!impossible && note) note.remove();
+      });
+    }
+    marquerImpossibles();
+
     function rafraichirChoix() {
+      marquerImpossibles();
       $vue.querySelectorAll('[data-sujet]').forEach(function (b) { b.setAttribute('aria-checked', String(b.getAttribute('data-sujet') === c.sujet)); });
       $vue.querySelectorAll('[data-situation]').forEach(function (b) { b.setAttribute('aria-checked', String(b.getAttribute('data-situation') === c.situation)); });
       var ok = !!(c.sujet && c.situation);

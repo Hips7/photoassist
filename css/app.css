@@ -173,6 +173,9 @@ p { margin: 0; }
   display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%;
   background: var(--accent); color: var(--accent-texte); font-weight: 800; font-size: 16px;
 }
+.option.impossible { border-style: dashed; background: var(--surface-2); }
+.option.impossible strong, .option.impossible small { color: var(--texte-2); }
+.note-impossible { display: block; margin-top: 2px; font-style: normal; font-size: 16px; font-weight: 650; color: var(--alerte); }
 .option-unique { padding: 12px 14px; border-radius: 14px; background: var(--surface-2); font-size: 16px; }
 
 .barre-action {
