@@ -1,0 +1,167 @@
+{
+  "version": 1,
+  "appareil": "Canon EOS 600D",
+  "objectif": "Canon EF-S 17-85 mm f/4-5.6 IS USM",
+
+  "styles": [
+    {
+      "id": "bokeh",
+      "nom": "Fond flou",
+      "sousTitre": "Le sujet net, l'arrière-plan tout doux",
+      "explication": "La personne ressort nettement, le décor derrière devient flou et doux. L'effet est plus fort quand tu zoomes au maximum, que tu te rapproches du sujet et que le fond est loin derrière lui.",
+      "image": "img/styles/bokeh.jpg",
+      "credit": {"auteur": "chelsea ferenando", "licence": "CC0", "source": "https://commons.wikimedia.org/wiki/File:Fashionable_woman_and_bokeh_(Unsplash).jpg"},
+      "sujets": ["portrait", "groupe"]
+    },
+    {
+      "id": "portrait_net",
+      "nom": "Portrait net",
+      "sousTitre": "La personne et le décor nets",
+      "explication": "La personne est nette et on reconnaît aussi l'endroit où elle se trouve. Idéal pour les souvenirs de vacances.",
+      "image": "img/styles/portrait_net.jpg",
+      "credit": {"auteur": "Anthony Ginsbrook", "licence": "CC0", "source": "https://commons.wikimedia.org/wiki/File:Outdoor_portrait_(Unsplash).jpg"},
+      "sujets": ["portrait", "groupe"]
+    },
+    {
+      "id": "paysage",
+      "nom": "Paysage",
+      "sousTitre": "Tout net, du premier plan à l'horizon",
+      "explication": "Grand angle et netteté partout : montagnes, mer, villes, panoramas.",
+      "image": "img/styles/paysage.jpg",
+      "credit": {"auteur": "Aleksandra Boguslawska", "licence": "CC0", "source": "https://commons.wikimedia.org/wiki/File:Mountain_lake_(Unsplash).jpg"},
+      "sujets": ["paysage"]
+    },
+    {
+      "id": "panning",
+      "nom": "Panoramique filé",
+      "sousTitre": "Le sujet net, le fond qui file",
+      "explication": "Tu suis le sujet en mouvement avec l'appareil : il reste net et le décor derrière forme des traînées. Donne une vraie impression de vitesse.",
+      "image": "img/styles/panning.jpg",
+      "credit": {"auteur": "Alvesgaspar", "licence": "CC BY-SA 3.0", "source": "https://commons.wikimedia.org/wiki/File:Chicken_February_2009-1.jpg"},
+      "sujets": ["action"]
+    },
+    {
+      "id": "sport",
+      "nom": "Action figée",
+      "sousTitre": "Arrêter le mouvement net",
+      "explication": "Fige un mouvement rapide : saut, ballon, enfant qui court, animal. Tout est net, comme arrêté dans le temps.",
+      "image": "img/styles/sport.jpg",
+      "credit": {"auteur": "Marvin Meyer", "licence": "CC0", "source": "https://commons.wikimedia.org/wiki/File:Crouching_surfer_in_action_(Unsplash).jpg"},
+      "sujets": ["action"]
+    },
+    {
+      "id": "nuit",
+      "nom": "Nuit / peu de lumière",
+      "sousTitre": "Photos sans flash quand il fait sombre",
+      "explication": "Pour garder l'ambiance d'une soirée, d'une rue éclairée ou d'une pièce sombre, sans flash et sans trépied.",
+      "image": "img/styles/nuit.jpg",
+      "credit": {"auteur": "Kevin Lee", "licence": "CC0", "source": "https://commons.wikimedia.org/wiki/File:Date_night_(Unsplash).jpg"},
+      "sujets": ["portrait", "groupe", "ville"]
+    },
+    {
+      "id": "eau",
+      "nom": "Filé d'eau",
+      "sousTitre": "L'eau devient soyeuse",
+      "explication": "Pose longue : l'eau qui coule (cascade, rivière, vagues) devient lisse comme de la soie. Trépied obligatoire.",
+      "image": "img/styles/eau.jpg",
+      "credit": {"auteur": "Adam Edgerton", "licence": "CC0", "source": "https://commons.wikimedia.org/wiki/File:Hraunfosar_in_the_Fall_(Unsplash).jpg"},
+      "sujets": ["paysage"]
+    }
+  ],
+
+  "situations": [
+    { "id": "plein_soleil",       "nom": "Plein soleil",       "icone": "☀️", "aide": "Ciel bleu, ombres bien nettes au sol" },
+    { "id": "ciel_voile",         "nom": "Ciel voilé",         "icone": "🌥️", "aide": "Nuageux, pas d'ombre marquée au sol" },
+    { "id": "ombre",              "nom": "À l'ombre",          "icone": "🌳", "aide": "Dehors en journée, mais à l'ombre : sous un arbre, en forêt, au pied d'un immeuble" },
+    { "id": "interieur_lumineux", "nom": "Intérieur lumineux", "icone": "🪟", "aide": "Pièce en journée avec de grandes fenêtres" },
+    { "id": "interieur_sombre",   "nom": "Intérieur sombre",   "icone": "💡", "aide": "Pièce éclairée seulement par des lampes, restaurant, soirée" },
+    { "id": "nuit",               "nom": "Nuit dehors",        "icone": "🌙", "aide": "Dehors après le coucher du soleil, rues éclairées" }
+  ],
+
+  "sujets": [
+    { "id": "portrait", "nom": "Une personne",       "icone": "🙂", "aide": "Cadrée de près : visage ou buste" },
+    { "id": "groupe",   "nom": "Un groupe",          "icone": "👨‍👩‍👧", "aide": "Plusieurs personnes sur la photo" },
+    { "id": "paysage",  "nom": "Un paysage",         "icone": "🏞️", "aide": "Nature, mer, montagne, cascade" },
+    { "id": "action",   "nom": "Quelque chose qui bouge", "icone": "🏃", "aide": "Enfant qui court, vélo, voiture, animal, sport" },
+    { "id": "ville",    "nom": "Ville & illuminations", "icone": "🏙️", "aide": "Rues, monuments, décorations lumineuses" }
+  ],
+
+  "regles": [
+    { "style": "bokeh", "sujet": "portrait", "situation": "plein_soleil",       "mode": "Av", "ouverture": "f/5.6", "vitesse": "1/1000", "iso": 100,  "focale": 85, "vitesseMini": "1/60", "conseil": "Place la personne dos au soleil ou à l'ombre d'un arbre : elle ne plissera pas les yeux et la lumière sera plus douce." },
+    { "style": "bokeh", "sujet": "portrait", "situation": "ciel_voile",         "mode": "Av", "ouverture": "f/5.6", "vitesse": "1/250",  "iso": 100,  "focale": 85, "vitesseMini": "1/60", "conseil": "Lumière idéale pour les portraits : douce et sans ombre dure sur le visage." },
+    { "style": "bokeh", "sujet": "portrait", "situation": "ombre",              "mode": "Av", "ouverture": "f/5.6", "vitesse": "1/250",  "iso": 200,  "focale": 85, "vitesseMini": "1/60", "conseil": "Cherche un fond lointain et lumineux (une allée, un parc ensoleillé au loin) : il deviendra un joli flou clair." },
+    { "style": "bokeh", "sujet": "portrait", "situation": "interieur_lumineux", "mode": "Av", "ouverture": "f/5.6", "vitesse": "1/125",  "iso": 1600, "focale": 85, "vitesseMini": "1/60", "conseil": "Place la personne face à la fenêtre (toi dos à la fenêtre) : son visage sera bien éclairé." },
+    { "style": "bokeh", "sujet": "portrait", "situation": "interieur_sombre",   "mode": "Av", "ouverture": "f/5.6", "vitesse": "1/60",   "iso": 3200, "focale": 85, "vitesseMini": "1/60", "conseil": "Rapproche la personne d'une lampe. Demande-lui de ne pas bouger au moment du déclic." },
+    { "style": "bokeh", "sujet": "portrait", "situation": "nuit",               "mode": "Av", "ouverture": "f/5.6", "vitesse": "1/30",   "iso": 6400, "focale": 85, "vitesseMini": "1/30", "conseil": "Les lumières de la ville derrière la personne deviennent de jolies bulles floues. Place-la sous un lampadaire ou près d'une vitrine éclairée, et appuie-toi contre un mur pour ne pas bouger." },
+
+    { "style": "bokeh", "sujet": "groupe", "situation": "plein_soleil",       "mode": "Av", "ouverture": "f/5.6", "vitesse": "1/1000", "iso": 100,  "focale": 50, "vitesseMini": "1/60", "conseil": "Tout le monde sur une même ligne, à la même distance de toi, sinon certains seront flous. Plus le fond est loin derrière eux, plus il sera flou." },
+    { "style": "bokeh", "sujet": "groupe", "situation": "ciel_voile",         "mode": "Av", "ouverture": "f/5.6", "vitesse": "1/250",  "iso": 100,  "focale": 50, "vitesseMini": "1/60", "conseil": "Tout le monde sur une même ligne, à la même distance de toi. Éloigne le groupe du mur ou des arbres derrière lui." },
+    { "style": "bokeh", "sujet": "groupe", "situation": "ombre",              "mode": "Av", "ouverture": "f/5.6", "vitesse": "1/250",  "iso": 200,  "focale": 50, "vitesseMini": "1/60", "conseil": "Tout le monde sur une même ligne, à la même distance de toi. Vérifie qu'aucun visage n'a une tache de soleil." },
+    { "style": "bokeh", "sujet": "groupe", "situation": "interieur_lumineux", "mode": "Av", "ouverture": "f/5.6", "vitesse": "1/125",  "iso": 1600, "focale": 50, "vitesseMini": "1/60", "conseil": "Tout le monde sur une même ligne, face à la fenêtre. Écarte le groupe du mur du fond." },
+    { "style": "bokeh", "sujet": "groupe", "situation": "interieur_sombre",   "mode": "Av", "ouverture": "f/5.6", "vitesse": "1/60",   "iso": 3200, "focale": 50, "vitesseMini": "1/60", "conseil": "Tout le monde sur une même ligne, près de la source de lumière. Demande à tous de ne pas bouger." },
+    { "style": "bokeh", "sujet": "groupe", "situation": "nuit",               "mode": "Av", "ouverture": "f/5.6", "vitesse": "1/30",   "iso": 6400, "focale": 50, "vitesseMini": "1/30", "conseil": "Groupe sous un éclairage (lampadaire, terrasse), lumières de la ville loin derrière. Appuie-toi contre un mur et demande à tous de ne pas bouger." },
+
+    { "style": "portrait_net", "sujet": "portrait", "situation": "plein_soleil",       "mode": "Av", "ouverture": "f/8",   "vitesse": "1/500", "iso": 100,  "focale": 35, "vitesseMini": "1/60", "conseil": "Évite le soleil de face dans les yeux de la personne : mets-la de trois-quarts par rapport au soleil." },
+    { "style": "portrait_net", "sujet": "portrait", "situation": "ciel_voile",         "mode": "Av", "ouverture": "f/8",   "vitesse": "1/250", "iso": 200,  "focale": 35, "vitesseMini": "1/60", "conseil": "Lumière douce, parfaite pour un portrait avec le décor." },
+    { "style": "portrait_net", "sujet": "portrait", "situation": "ombre",              "mode": "Av", "ouverture": "f/8",   "vitesse": "1/250", "iso": 400,  "focale": 35, "vitesseMini": "1/60", "conseil": "Vérifie qu'il n'y a pas de taches de soleil sur le visage." },
+    { "style": "portrait_net", "sujet": "portrait", "situation": "interieur_lumineux", "mode": "Av", "ouverture": "f/5.6", "vitesse": "1/125", "iso": 1600, "focale": 35, "vitesseMini": "1/60", "conseil": "À l'intérieur, on garde f/5.6 pour avoir assez de lumière. Place la personne face à la fenêtre." },
+    { "style": "portrait_net", "sujet": "portrait", "situation": "interieur_sombre",   "mode": "Av", "ouverture": "f/5.6", "vitesse": "1/60",  "iso": 3200, "focale": 35, "vitesseMini": "1/60", "conseil": "Rapproche la personne d'une lampe. Demande-lui de ne pas bouger au moment du déclic." },
+    { "style": "portrait_net", "sujet": "portrait", "situation": "nuit",               "mode": "Av", "ouverture": "f/5.6", "vitesse": "1/30",  "iso": 6400, "focale": 35, "vitesseMini": "1/30", "conseil": "Place la personne sous un éclairage (lampadaire, vitrine). Appuie-toi contre un mur pour ne pas bouger." },
+
+    { "style": "portrait_net", "sujet": "groupe", "situation": "plein_soleil",       "mode": "Av", "ouverture": "f/8",   "vitesse": "1/500", "iso": 100,  "focale": 24, "vitesseMini": "1/60", "conseil": "Mets le groupe de trois-quarts par rapport au soleil pour éviter les yeux plissés. Recule jusqu'à ce que tout le monde rentre dans le cadre." },
+    { "style": "portrait_net", "sujet": "groupe", "situation": "ciel_voile",         "mode": "Av", "ouverture": "f/8",   "vitesse": "1/250", "iso": 200,  "focale": 24, "vitesseMini": "1/60", "conseil": "Recule jusqu'à ce que tout le monde rentre dans le cadre, avec un peu de marge autour." },
+    { "style": "portrait_net", "sujet": "groupe", "situation": "ombre",              "mode": "Av", "ouverture": "f/8",   "vitesse": "1/250", "iso": 400,  "focale": 24, "vitesseMini": "1/60", "conseil": "Tout le groupe entièrement à l'ombre : pas de taches de soleil sur les visages." },
+    { "style": "portrait_net", "sujet": "groupe", "situation": "interieur_lumineux", "mode": "Av", "ouverture": "f/5.6", "vitesse": "1/125", "iso": 1600, "focale": 24, "vitesseMini": "1/60", "conseil": "Groupe face à la fenêtre, toi dos à la fenêtre." },
+    { "style": "portrait_net", "sujet": "groupe", "situation": "interieur_sombre",   "mode": "Av", "ouverture": "f/5.6", "vitesse": "1/60",  "iso": 3200, "focale": 24, "vitesseMini": "1/60", "conseil": "Rassemble le groupe près de la source de lumière. Demande à tous de ne pas bouger." },
+    { "style": "portrait_net", "sujet": "groupe", "situation": "nuit",               "mode": "Av", "ouverture": "f/5.6", "vitesse": "1/30",  "iso": 6400, "focale": 24, "vitesseMini": "1/30", "conseil": "Groupe sous un éclairage. Appuie-toi contre un mur et demande à tous de ne pas bouger." },
+
+    { "style": "paysage", "sujet": "paysage", "situation": "plein_soleil",       "mode": "Av", "ouverture": "f/11", "vitesse": "1/250", "iso": 100, "focale": 17, "vitesseMini": "1/30", "conseil": "Garde le soleil dans ton dos ou sur le côté. Mets la ligne d'horizon bien droite, en haut ou en bas du cadre plutôt qu'au milieu." },
+    { "style": "paysage", "sujet": "paysage", "situation": "ciel_voile",         "mode": "Av", "ouverture": "f/11", "vitesse": "1/60",  "iso": 100, "focale": 17, "vitesseMini": "1/30", "conseil": "Un ciel tout gris n'est pas très joli : cadre avec peu de ciel et plus de paysage." },
+    { "style": "paysage", "sujet": "paysage", "situation": "ombre",              "mode": "Av", "ouverture": "f/11", "vitesse": "1/30",  "iso": 100, "focale": 17, "vitesseMini": "1/15", "conseil": "En forêt ou à l'ombre, tiens l'appareil à deux mains, coudes serrés contre le corps." },
+    { "style": "paysage", "sujet": "paysage", "situation": "interieur_lumineux", "indisponible": true, "raison": "Un paysage se photographie dehors.", "alternative": "nuit", "alternativeSujet": "ville", "alternativeTexte": "Pour photographier un grand intérieur (église, salle, monument), choisis plutôt « Nuit / peu de lumière », sujet « Ville & illuminations »." },
+    { "style": "paysage", "sujet": "paysage", "situation": "interieur_sombre",   "indisponible": true, "raison": "Un paysage se photographie dehors.", "alternative": "nuit", "alternativeSujet": "ville", "alternativeTexte": "Pour photographier un grand intérieur (église, salle, monument), choisis plutôt « Nuit / peu de lumière », sujet « Ville & illuminations »." },
+    { "style": "paysage", "sujet": "paysage", "situation": "nuit",               "mode": "Av", "ouverture": "f/8",  "vitesse": "4",     "iso": 100, "focale": 17, "trepied": true, "retardateur": true, "conseil": "Idéal pour une ville éclairée ou un monument la nuit. La photo prend plusieurs secondes : ne touche pas l'appareil avant la fin (le clic de fermeture). Un ciel étoilé en pleine nature est trop sombre pour ces réglages." },
+
+    { "style": "panning", "sujet": "action", "situation": "plein_soleil",       "mode": "Tv", "vitesse": "1/60", "ouverture": "f/22",  "iso": 100,  "focale": 35, "conseil": "En plein soleil, 1/60 est le plus lent possible : l'effet marche mieux sur un sujet rapide (voiture, vélo, moto)." },
+    { "style": "panning", "sujet": "action", "situation": "ciel_voile",         "mode": "Tv", "vitesse": "1/30", "ouverture": "f/16",  "iso": 100,  "focale": 35, "conseil": "Commence à suivre le sujet avant qu'il arrive devant toi, déclenche quand il passe en face, et continue à le suivre après le déclic." },
+    { "style": "panning", "sujet": "action", "situation": "ombre",              "mode": "Tv", "vitesse": "1/30", "ouverture": "f/11",  "iso": 100,  "focale": 35, "conseil": "Commence à suivre le sujet avant qu'il arrive devant toi, déclenche quand il passe en face, et continue à le suivre après le déclic." },
+    { "style": "panning", "sujet": "action", "situation": "interieur_lumineux", "mode": "Tv", "vitesse": "1/30", "ouverture": "f/5.6", "iso": 400,  "focale": 35, "conseil": "Suis le sujet d'un mouvement régulier en pivotant les hanches, pas seulement les bras." },
+    { "style": "panning", "sujet": "action", "situation": "interieur_sombre",   "mode": "Tv", "vitesse": "1/30", "ouverture": "f/5.6", "iso": 1600, "focale": 35, "conseil": "Suis le sujet d'un mouvement régulier en pivotant les hanches, pas seulement les bras." },
+    { "style": "panning", "sujet": "action", "situation": "nuit",               "mode": "Tv", "vitesse": "1/30", "ouverture": "f/5.6", "iso": 6400, "focale": 35, "conseil": "Les lumières de la ville deviennent de longues traînées : très joli avec des voitures ou des vélos éclairés. Le sujet doit être éclairé (lampadaires)." },
+
+    { "style": "sport", "sujet": "action", "situation": "plein_soleil",       "mode": "Tv", "vitesse": "1/1000", "ouverture": "f/5.6", "iso": 100,  "focale": 50, "conseil": "Fais la mise au point à mi-course sur le sujet juste avant l'action, puis déclenche au bon moment (sommet du saut, frappe du ballon)." },
+    { "style": "sport", "sujet": "action", "situation": "ciel_voile",         "mode": "Tv", "vitesse": "1/500",  "ouverture": "f/5.6", "iso": 200,  "focale": 50, "conseil": "Fais la mise au point à mi-course sur le sujet juste avant l'action, puis déclenche au bon moment." },
+    { "style": "sport", "sujet": "action", "situation": "ombre",              "mode": "Tv", "vitesse": "1/500",  "ouverture": "f/5.6", "iso": 400,  "focale": 50, "conseil": "Fais la mise au point à mi-course sur le sujet juste avant l'action, puis déclenche au bon moment." },
+    { "style": "sport", "sujet": "action", "situation": "interieur_lumineux", "mode": "Tv", "vitesse": "1/250",  "ouverture": "f/5.6", "iso": 3200, "focale": 50, "conseil": "À l'intérieur, 1/250 fige la plupart des mouvements (gymnase, enfants qui jouent). Les mouvements très rapides peuvent garder un léger flou." },
+    { "style": "sport", "sujet": "action", "situation": "interieur_sombre",   "mode": "Tv", "vitesse": "1/125",  "ouverture": "f/5.6", "iso": 6400, "focale": 50, "conseil": "Il manque de lumière : 1/125 fige un mouvement modéré (enfant qui marche, danse lente) mais pas un sprint. Déclenche au moment où le mouvement ralentit (sommet d'un saut)." },
+    { "style": "sport", "sujet": "action", "situation": "nuit", "indisponible": true, "raison": "Il fait trop sombre pour figer un mouvement avec ton objectif : la photo serait floue ou toute noire.", "alternative": "panning", "alternativeTexte": "Essaie plutôt le « Panoramique filé » : le flou devient un effet voulu." },
+
+    { "style": "nuit", "sujet": "portrait", "situation": "plein_soleil",       "indisponible": true, "raison": "Il fait grand jour : le style Nuit ne sert à rien ici.", "alternative": "portrait_net", "alternativeTexte": "Choisis « Portrait net » ou « Fond flou »." },
+    { "style": "nuit", "sujet": "portrait", "situation": "ciel_voile",         "indisponible": true, "raison": "Il fait jour : le style Nuit ne sert à rien ici.", "alternative": "portrait_net", "alternativeTexte": "Choisis « Portrait net » ou « Fond flou »." },
+    { "style": "nuit", "sujet": "portrait", "situation": "ombre",              "indisponible": true, "raison": "Il fait jour : le style Nuit ne sert à rien ici.", "alternative": "portrait_net", "alternativeTexte": "Choisis « Portrait net » ou « Fond flou »." },
+    { "style": "nuit", "sujet": "portrait", "situation": "interieur_lumineux", "mode": "Av", "ouverture": "f/4", "vitesse": "1/125", "iso": 800,  "focale": 17, "vitesseMini": "1/30", "conseil": "Reste à au moins 1,5 m de la personne : de trop près, le grand angle déforme le visage." },
+    { "style": "nuit", "sujet": "portrait", "situation": "interieur_sombre",   "mode": "Av", "ouverture": "f/4", "vitesse": "1/60",  "iso": 1600, "focale": 17, "vitesseMini": "1/30", "conseil": "Rapproche la personne d'une lampe. Reste à au moins 1,5 m d'elle : de trop près, le grand angle déforme le visage." },
+    { "style": "nuit", "sujet": "portrait", "situation": "nuit",               "mode": "Av", "ouverture": "f/4", "vitesse": "1/30",  "iso": 3200, "focale": 17, "vitesseMini": "1/30", "conseil": "Place la personne sous un lampadaire ou près d'une vitrine éclairée. Demande-lui de ne pas bouger, et appuie-toi contre un mur." },
+
+    { "style": "nuit", "sujet": "groupe", "situation": "plein_soleil",       "indisponible": true, "raison": "Il fait grand jour : le style Nuit ne sert à rien ici.", "alternative": "portrait_net", "alternativeTexte": "Choisis « Portrait net » ou « Fond flou »." },
+    { "style": "nuit", "sujet": "groupe", "situation": "ciel_voile",         "indisponible": true, "raison": "Il fait jour : le style Nuit ne sert à rien ici.", "alternative": "portrait_net", "alternativeTexte": "Choisis « Portrait net » ou « Fond flou »." },
+    { "style": "nuit", "sujet": "groupe", "situation": "ombre",              "indisponible": true, "raison": "Il fait jour : le style Nuit ne sert à rien ici.", "alternative": "portrait_net", "alternativeTexte": "Choisis « Portrait net » ou « Fond flou »." },
+    { "style": "nuit", "sujet": "groupe", "situation": "interieur_lumineux", "mode": "Av", "ouverture": "f/4", "vitesse": "1/125", "iso": 800,  "focale": 17, "vitesseMini": "1/30", "conseil": "Rassemble le groupe face à la lumière. Les personnes sur les bords du cadre peuvent être un peu déformées : garde-les vers le centre." },
+    { "style": "nuit", "sujet": "groupe", "situation": "interieur_sombre",   "mode": "Av", "ouverture": "f/4", "vitesse": "1/60",  "iso": 1600, "focale": 17, "vitesseMini": "1/30", "conseil": "Rassemble le groupe près de la source de lumière. Demande à tous de ne pas bouger." },
+    { "style": "nuit", "sujet": "groupe", "situation": "nuit",               "mode": "Av", "ouverture": "f/4", "vitesse": "1/30",  "iso": 3200, "focale": 17, "vitesseMini": "1/30", "conseil": "Groupe sous un éclairage (lampadaire, terrasse). Demande à tous de ne pas bouger, et appuie-toi contre un mur." },
+
+    { "style": "nuit", "sujet": "ville", "situation": "plein_soleil",       "indisponible": true, "raison": "Il fait grand jour : le style Nuit ne sert à rien ici.", "alternative": "paysage", "alternativeTexte": "Choisis « Paysage » pour une ville en journée." },
+    { "style": "nuit", "sujet": "ville", "situation": "ciel_voile",         "indisponible": true, "raison": "Il fait jour : le style Nuit ne sert à rien ici.", "alternative": "paysage", "alternativeTexte": "Choisis « Paysage » pour une ville en journée." },
+    { "style": "nuit", "sujet": "ville", "situation": "ombre",              "indisponible": true, "raison": "Il fait jour : le style Nuit ne sert à rien ici.", "alternative": "paysage", "alternativeTexte": "Choisis « Paysage » pour une ville en journée." },
+    { "style": "nuit", "sujet": "ville", "situation": "interieur_lumineux", "mode": "Av", "ouverture": "f/4", "vitesse": "1/60", "iso": 400,  "focale": 17, "vitesseMini": "1/15", "conseil": "Parfait pour un grand intérieur : église, musée, gare. Tiens l'appareil à deux mains, coudes serrés." },
+    { "style": "nuit", "sujet": "ville", "situation": "interieur_sombre",   "mode": "Av", "ouverture": "f/4", "vitesse": "1/30", "iso": 800,  "focale": 17, "vitesseMini": "1/15", "conseil": "Appuie-toi contre un pilier ou pose l'appareil sur un rebord pour ne pas bouger." },
+    { "style": "nuit", "sujet": "ville", "situation": "nuit",               "mode": "Av", "ouverture": "f/4", "vitesse": "1/15", "iso": 1600, "focale": 17, "vitesseMini": "1/15", "conseil": "Bloque ta respiration au moment du déclic, coudes serrés contre le corps, ou appuie-toi contre un mur. Pour une photo encore plus propre, prends le style « Paysage » avec un trépied." },
+
+    { "style": "eau", "sujet": "paysage", "situation": "plein_soleil", "indisponible": true, "raison": "Trop de lumière : même avec les réglages les plus sombres, la photo ne peut pas durer plus de 1/60 s, et l'eau restera figée.", "alternative": "paysage", "alternativeTexte": "Reviens en fin de journée ou quand la cascade est à l'ombre. Autre solution : un filtre ND (un filtre gris qui se visse devant l'objectif, diamètre 67 mm pour ton objectif)." },
+    { "style": "eau", "sujet": "paysage", "situation": "ciel_voile",         "mode": "Tv", "vitesse": "1/15", "ouverture": "f/22", "iso": 100, "focale": 24, "trepied": true, "retardateur": true, "conseil": "Avec cette lumière, l'effet sera léger (eau un peu adoucie). Pour un vrai effet soyeux, reviens en fin de journée ou choisis une cascade à l'ombre." },
+    { "style": "eau", "sujet": "paysage", "situation": "ombre",              "mode": "Tv", "vitesse": "1/8",  "ouverture": "f/22", "iso": 100, "focale": 24, "trepied": true, "retardateur": true, "conseil": "Bon effet sur une cascade ou un torrent rapide. Plus la lumière baisse (fin de journée), plus tu peux mettre une vitesse lente et plus l'eau sera soyeuse." },
+    { "style": "eau", "sujet": "paysage", "situation": "interieur_lumineux", "indisponible": true, "raison": "L'effet filé d'eau se fait dehors, sur de l'eau qui coule (cascade, rivière, vagues).", "alternative": null, "alternativeTexte": "Choisis une situation d'extérieur : ciel voilé, à l'ombre ou nuit dehors." },
+    { "style": "eau", "sujet": "paysage", "situation": "interieur_sombre",   "indisponible": true, "raison": "L'effet filé d'eau se fait dehors, sur de l'eau qui coule (cascade, rivière, vagues).", "alternative": null, "alternativeTexte": "Choisis une situation d'extérieur : ciel voilé, à l'ombre ou nuit dehors." },
+    { "style": "eau", "sujet": "paysage", "situation": "nuit",               "mode": "Tv", "vitesse": "8",    "ouverture": "f/11", "iso": 100, "focale": 24, "trepied": true, "retardateur": true, "conseil": "Magnifique sur une fontaine éclairée ou un port la nuit. La photo dure 8 secondes : ne touche à rien avant la fin (le deuxième clic)." }
+  ]
+}
