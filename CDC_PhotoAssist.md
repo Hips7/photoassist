@@ -61,7 +61,7 @@ Chaque résultat doit afficher, en plus des valeurs, la procédure physique :
 
 | Étape | Manipulation |
 |---|---|
-| Choix du mode | Molette de sélection des modes (dessus, gauche) → Av / Tv / M |
+| Choix du mode | Molette de sélection des modes (dessus, droite) → Av / Tv / M |
 | Réglage ouverture | Mode Av/M : molette principale (près du déclencheur) |
 | Réglage vitesse | Mode Tv/M : molette principale (près du déclencheur) |
 | Réglage ISO | Bouton ISO (dessus du boîtier) → molette principale → SET |

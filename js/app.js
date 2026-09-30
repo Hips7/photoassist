@@ -240,7 +240,7 @@
 
     e.push({
       titre: 'Allume l\'appareil',
-      ou: 'L\'interrupteur est <b>sur le dessus, à gauche</b>, juste sous la grande molette des modes. Mets-le sur <span class="kbd">ON</span>.',
+      ou: 'L\'interrupteur est <b>sur le dessus, à droite</b>, juste à côté de la grande molette des modes. Mets-le sur <span class="kbd">ON</span>.',
       voir: 'L\'écran au dos s\'allume. S\'il reste noir, appuie sur le bouton <span class="kbd">DISP.</span> (au dos, en haut à gauche).'
     });
     if (r.trepied) {
@@ -262,7 +262,7 @@
     });
     e.push({
       titre: 'Tourne la molette des modes sur ' + r.mode,
-      ou: 'C\'est la <b>grande molette sur le dessus, à gauche</b>. Tourne-la jusqu\'à ce que <span class="kbd">' + r.mode + '</span> soit face au trait blanc.',
+      ou: 'C\'est la <b>grande molette sur le dessus, à droite</b>, derrière le déclencheur. Tourne-la jusqu\'à ce que <span class="kbd">' + r.mode + '</span> soit face au trait blanc.',
       voir: tv
         ? 'Mode Tv : <b>tu choisis la vitesse</b>, l\'appareil règle l\'ouverture tout seul.'
         : 'Mode Av : <b>tu choisis l\'ouverture</b>, l\'appareil règle la vitesse tout seul.'
@@ -522,8 +522,8 @@
 
   function vueBoutons() {
     var reperes = [
-      ['1', 'Molette des modes', 'Dessus, à gauche. La grande molette avec Av, Tv, M…'],
-      ['2', 'Interrupteur ON / OFF', 'Dessus, à gauche, juste sous la molette des modes.'],
+      ['1', 'Molette des modes', 'Dessus, à droite, derrière le déclencheur. La grande molette avec Av, Tv, M…'],
+      ['2', 'Interrupteur ON / OFF', 'Dessus, à droite, juste à côté de la molette des modes.'],
       ['3', 'Déclencheur', 'Dessus, à droite, sous ton index. À moitié = mise au point, à fond = photo.'],
       ['4', 'Molette principale', 'Dessus, juste derrière le déclencheur. Elle change la valeur que tu règles.'],
       ['5', 'Bouton ISO', 'Dessus, juste derrière la molette principale.'],
@@ -557,14 +557,16 @@
       '<rect class="piece" x="130" y="28" width="80" height="44" rx="6"/><text x="170" y="55" text-anchor="middle">objectif</text>' +
       '<rect class="corps" x="30" y="72" width="280" height="90" rx="18"/>' +
       '<rect class="piece" x="148" y="100" width="44" height="34" rx="6"/><text x="170" y="122" text-anchor="middle">flash</text>' +
-      '<circle class="piece" cx="88" cy="112" r="27"/><text x="88" y="117" text-anchor="middle">Av Tv</text>' +
-      '<path class="piece" d="M64 142 q24 14 48 0" fill="none"/>' +
-      '<circle class="piece" cx="262" cy="92" r="11"/>' +
-      '<rect class="piece" x="244" y="112" width="36" height="12" rx="5"/>' +
-      '<rect class="piece" x="253" y="134" width="18" height="10" rx="3"/>' +
+      // Toutes les commandes du dessus sont à droite (côté poignée)
+      '<circle class="piece" cx="232" cy="130" r="22"/><text x="232" y="135" text-anchor="middle">Av Tv</text>' +
+      '<path class="piece" d="M206 114 q-12 16 0 32" fill="none"/>' +
+      '<circle class="piece" cx="284" cy="88" r="10"/>' +
+      '<rect class="piece" x="268" y="103" width="32" height="11" rx="5"/>' +
+      '<rect class="piece" x="276" y="122" width="16" height="9" rx="3"/>' +
+      '<text x="80" y="122" text-anchor="middle">(rien ici)</text>' +
       '<text x="170" y="182" text-anchor="middle">écran (dos) = de ton côté</text>' +
       '<text x="170" y="200" text-anchor="middle">↓ toi</text>' +
-      rep('1', 50, 90) + rep('2', 46, 146) + rep('3', 296, 92) + rep('4', 298, 118) + rep('5', 296, 144) +
+      rep('1', 244, 96) + rep('2', 190, 152) + rep('3', 310, 80) + rep('4', 318, 108) + rep('5', 312, 134) +
       '</svg>';
   }
 

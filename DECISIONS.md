@@ -55,3 +55,7 @@ Chaque règle est contrôlée automatiquement (`tools/verif_table.js`) : l'expos
 - Thème nuit rouge : activé si style = Nuit **ou** situation = Nuit.
 - Police ≥ 16 px partout, fort contraste.
 - Écran d'aide à l'installation sur iPhone + écran « Repérer les boutons ».
+
+## Corrections terrain
+
+- 2026-09-30 — Molette des modes et interrupteur ON/OFF : **dessus, à droite** (côté poignée), pas à gauche. Erreur du CDC v1 corrigée (CDC, étapes, liste et schéma des boutons).
