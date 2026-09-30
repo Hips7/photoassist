@@ -256,7 +256,7 @@
     if (m.id === 'ca') {
       e.push({
         titre: 'Choisis « arrière-plan net »',
-        ou: 'Appuie sur le bouton <span class="kbd">Q</span> (au dos, près de la croix). Avec les flèches de la croix, va sur la ligne <b>flou ↔ net</b>. Tourne la <b>molette principale</b> (derrière le déclencheur) <b>vers la droite</b>, jusqu\'au bout.',
+        ou: 'Appuie sur le bouton <span class="kbd">Q</span> : au dos, collé au bord droit de l\'écran, juste sous le bouton Av (il porte un « Q » et une petite imprimante). Avec les flèches de la croix, va sur la ligne <b>flou ↔ net</b>. Tourne la <b>molette principale</b> (derrière le déclencheur) <b>vers la droite</b>, jusqu\'au bout.',
         voir: 'Le curseur est côté « net ». Appuie à moitié sur le déclencheur pour revenir.'
       });
     }
@@ -318,7 +318,7 @@
     });
     e.push({
       titre: 'Regarde le résultat',
-      ou: 'Bouton lecture <span class="kbd">▶</span> au dos, en bas à droite. Pour zoomer dans la photo : bouton loupe, au dos en haut à droite.',
+      ou: 'Bouton lecture <span class="kbd">▶</span> : au dos, collé au bord droit de l\'écran, en bas (sous la croix, côté écran). Pour zoomer dans la photo : bouton loupe, au dos en haut à droite.',
       voir: 'Floue ? Relis le conseil ci-dessous. Pour revenir à la prise de vue, appuie à moitié sur le déclencheur.'
     });
     return e;
@@ -507,9 +507,9 @@
       ['3', 'Déclencheur', 'Dessus, à droite, sous ton index. À moitié = mise au point, à fond = photo.'],
       ['4', 'Molette principale', 'Dessus, juste derrière le déclencheur. Elle change la valeur affichée.'],
       ['5', 'Boutons ISO et DISP.', 'Dessus, derrière la molette principale. DISP. allume ou éteint l\'écran des réglages.'],
-      ['6', 'Bouton Q', 'Au dos, près de la croix. Ouvre l\'écran de réglage rapide (utilisé en mode CA).'],
+      ['6', 'Bouton Q', 'Au dos, collé au bord droit de l\'écran, juste sous le bouton Av. Marqué « Q » avec une petite imprimante. Ouvre l\'écran de réglage rapide (utilisé en mode CA).'],
       ['7', 'Croix + SET', 'Au dos, à droite. SET au centre valide. La flèche gauche règle le retardateur.'],
-      ['8', 'Bouton lecture ▶', 'Au dos, en bas à droite. Pour revoir tes photos.']
+      ['8', 'Bouton lecture ▶', 'Au dos, collé au bord droit de l\'écran, en bas. Pour revoir tes photos.']
     ];
     var html = '<div class="intro"><h2>Les boutons du 600D</h2><p>Les repères utilisés dans les étapes.</p></div>' +
       schemaAppareil() + '<ul class="liste-aide">';

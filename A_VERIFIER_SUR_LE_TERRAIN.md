@@ -7,8 +7,8 @@ Restent quelques positions que le manuel montre en dessin mais pas en texte.
 
 | # | Point | Où dans l'app |
 |---|---|---|
-| 1 | Le bouton **DISP.** est bien sur le dessus, à côté du bouton ISO | Étape « Allume l'appareil » |
-| 2 | Le bouton **Q** est bien au dos, près de la croix | Portrait net (mode CA) |
+| 1 | ~~DISP. à côté d'ISO~~ ✅ confirmé le 2026-09-30 | |
+| 2 | Bouton **Q** : au dos, collé au bord droit de l'écran, sous le bouton Av (d'après le dessin du manuel p.19) | Portrait net (mode CA) |
 | 3 | En mode **CA**, la ligne « flou ↔ net » se règle bien avec la molette principale | Portrait net |
 | 4 | Le schéma « Repérer les boutons » correspond à l'appareil | Aide → Repérer les boutons |
 

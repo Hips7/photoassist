@@ -1,6 +1,6 @@
 // Service Worker PhotoAssist : fonctionnement hors-ligne.
 // À CHAQUE modification de l'app : augmenter VERSION, sinon l'iPhone garde l'ancienne version.
-var VERSION = 'v4';
+var VERSION = 'v5';
 var CACHE = 'photoassist-' + VERSION;
 var FICHIERS = [
   './',
