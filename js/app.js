@@ -311,7 +311,7 @@
     });
     e.push({
       titre: 'Molette des modes sur « ' + m.nom + ' »',
-      ou: 'Tourne la <b>grande molette sur le dessus, à droite</b> jusqu\'à ' + esc(m.repere) + ', face au trait blanc.',
+      ou: 'Tourne la <b>grande molette sur le dessus, à droite</b> jusqu\'à ce symbole ' + icone(m.id, 26) + ' (' + esc(m.repere) + '), face au trait blanc.',
       voir: esc(m.role),
       aide: AIDE.molette
     });
@@ -402,6 +402,122 @@
     return e;
   }
 
+  // Icônes de la molette des modes (d'après le manuel p.22), dessinées en SVG
+  var ICONES = {
+    auto: '<rect x="3" y="4" width="18" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><text x="11" y="16.5" text-anchor="middle" font-size="10" font-weight="800" fill="currentColor" font-family="sans-serif">A</text><path d="M16.5 7.5v4M14.5 9.5h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
+    portrait: '<path d="M8.5 21v-3.2C6.3 16.6 5 14.3 5 11.6 5 7.4 8.2 4 12.3 4c3.4 0 6.2 2.3 6.7 5.6l1.6 3.1c.2.4-.1.8-.5.8H19v2.4c0 1.1-.9 2-2 2h-1.6V21" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>',
+    paysage: '<path d="M2 19l6.5-10 4 6 2.5-3.5L22 19z" fill="currentColor"/>',
+    gros_plan: '<path d="M12 21v-8.5M12 12.5c-3.6 0-5-2.6-5-6.5l2.6 1.8L12 4l2.4 3.8L17 6c0 3.9-1.4 6.5-5 6.5zM12 17.5c-1.6-1.8-3.4-2.3-5-2.3M12 17.5c1.6-1.8 3.4-2.3 5-2.3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>',
+    sports: '<circle cx="15.5" cy="4.5" r="2" fill="currentColor"/><path d="M13.5 8l-3.5 4.5 4 2.5-2 5.5M10 12.5l-4.5 1M14 8.5l4.5 2.5M11.5 17l-4 3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+    flash_annule: '<rect x="3" y="4" width="18" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M13 6.5l-4.5 6.5h3.5l-1 4.5 4.5-6.5H12z" fill="currentColor"/><path d="M5 18.5L19 5.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
+    ca: '<rect x="3" y="4" width="18" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><text x="12" y="16" text-anchor="middle" font-size="8.5" font-weight="800" fill="currentColor" font-family="sans-serif">CA</text>',
+    Tv: '<text x="12" y="17" text-anchor="middle" font-size="12" font-weight="800" fill="currentColor" font-family="sans-serif">Tv</text>',
+    Av: '<text x="12" y="17" text-anchor="middle" font-size="12" font-weight="800" fill="currentColor" font-family="sans-serif">Av</text>'
+  };
+  function icone(id, taille) {
+    return ICONES[id] ? '<svg class="icone-mode" viewBox="0 0 24 24" width="' + (taille || 28) + '" height="' + (taille || 28) + '" aria-hidden="true">' + ICONES[id] + '</svg>' : '';
+  }
+
+  // Préférence Automatique / Je règle moi-même (confort local, non critique)
+  var CLE_NIVEAU = 'photoassist.niveau';
+  function niveau() { try { return localStorage.getItem(CLE_NIVEAU) === 'manuel' ? 'manuel' : 'auto'; } catch (e) { return 'auto'; } }
+  function choisirNiveau(n) { try { localStorage.setItem(CLE_NIVEAU, n); } catch (e) { /* ignoré */ } }
+
+  // Étapes du mode « Je règle moi-même » (Av ou Tv, ISO fixé), vérifiées dans le manuel :
+  // Av p.96, Tv p.94, ISO p.79, style d'image p.81, correction d'exposition p.103, flash p.90
+  function etapesManuel(r) {
+    var m = r.manuel;
+    var s = style(r.style);
+    var tv = m.mode === 'Tv';
+    var e = [];
+    var cranPlus = m.iso < 6400 ? m.iso * 2 : null;
+
+    e.push({
+      titre: 'Allume l\'appareil',
+      ou: 'Interrupteur <b>sur le dessus, à droite</b> : mets-le sur <span class="kbd">ON</span>.',
+      voir: 'S\'il reste noir, appuie sur <span class="kbd">DISP.</span> (dessus, à côté d\'ISO).',
+      aide: AIDE.allumage
+    });
+    e.push({
+      titre: 'Molette des modes sur ' + m.mode,
+      ou: 'Tourne la <b>grande molette sur le dessus, à droite</b> jusqu\'aux lettres ' + icone(m.mode, 22) + ', face au trait blanc.',
+      voir: tv ? '<b>Tu choisis la vitesse</b> (le mouvement), l\'appareil calcule l\'ouverture.' : '<b>Tu choisis l\'ouverture</b> (la netteté du fond), l\'appareil calcule la vitesse.',
+      aide: AIDE.molette
+    });
+    e.push(tv ? {
+      titre: 'Vitesse : ' + vitesseTexte(m.vitesse),
+      ou: 'Tourne la <b>molette principale</b> (juste derrière le déclencheur).',
+      voir: 'L\'écran affiche <span class="kbd">' + esc(vitesseBoitier(m.vitesse)) + '</span>' + (m.vitesse.indexOf('/') > -1 ? ' (sans le « 1/ »).' : ' (" = secondes).'),
+      aide: AIDE.vitesseTv.slice(0, 1)
+    } : {
+      titre: 'Ouverture : ' + m.ouverture,
+      ou: 'Tourne la <b>molette principale</b> (juste derrière le déclencheur) : vers la gauche = plus petit chiffre, vers la droite = plus grand.',
+      voir: 'L\'écran affiche <span class="kbd">F' + esc(m.ouverture.replace('f/', '')) + '</span>. S\'il refuse de descendre, vérifie le zoom : à 85 mm, le minimum est 5.6.',
+      aide: [['La molette change la vitesse, pas l\'ouverture', 'Tu es en Tv ou en M : remets la molette des modes sur Av.']]
+    });
+    e.push({
+      titre: 'ISO : ' + m.iso,
+      ou: 'Appuie sur <span class="kbd">ISO</span> (dessus, derrière la molette principale), tourne la molette jusqu\'à <b>' + m.iso + '</b>, puis <span class="kbd">SET</span>.',
+      voir: 'L\'écran affiche <b>ISO ' + m.iso + '</b>.',
+      aide: [['Le bouton ISO ne fait rien', 'Il ne marche qu\'en Av, Tv, M ou P : vérifie la molette des modes.']]
+    });
+    if (s.ambiance === 'monochrome') {
+      e.push({
+        titre: 'Style d\'image : Monochrome',
+        ou: 'Au dos, appuie sur la <b>flèche ▼ de la croix</b> (style d\'image). Choisis <b>« Monochrome »</b> avec la molette, puis <span class="kbd">SET</span>.',
+        voir: 'Ce réglage <b>reste</b> même en éteignant : pense à revenir sur « Standard » après ta séance.',
+        aide: [['Je ne vois pas « Monochrome »', 'Fais défiler la liste avec la molette : Auto, Standard, Portrait, Paysage, Neutre, Fidèle, puis Monochrome.']]
+      });
+    }
+    e.push({
+      titre: 'Zoom sur ' + r.focale + ' mm',
+      ou: 'Tourne la <b>large bague en caoutchouc</b> jusqu\'à <b>' + r.focale + '</b> face au trait blanc.',
+      aide: AIDE.zoom
+    });
+    if (r.trepied) {
+      e.push({
+        titre: 'Trépied + retardateur 2 secondes',
+        ou: 'Pose l\'appareil sur le trépied. Au dos, <b>flèche gauche de la croix</b> → <b>horloge « 2 »</b> → <span class="kbd">SET</span>.',
+        voir: 'Pense à revenir sur le rectangle simple après.',
+        aide: AIDE.retardateur.slice(1)
+      });
+    }
+    e.push({
+      titre: 'Vise et fais la mise au point',
+      ou: 'Place le sujet au centre du viseur et appuie <b>à moitié</b> sur le déclencheur.',
+      voir: 'Un « bip » et le <b>point vert</b> : c\'est net.',
+      aide: AIDE.miseAuPoint
+    });
+    if (tv) {
+      e.push({
+        titre: 'Lis l\'ouverture calculée',
+        ou: 'En bas du viseur, le <b>2e nombre</b> est l\'ouverture choisie par l\'appareil (environ <b>' + esc(m.ouverture.replace('f/', '')) + '</b>).',
+        voir: 'S\'il clignote sur un petit chiffre : trop sombre → ISO un cran plus haut' + (cranPlus ? ' (' + cranPlus + ')' : '') + '. S\'il clignote sur 22 : trop clair → ISO un cran plus bas ou vitesse plus rapide (manuel p.95).',
+        aide: AIDE.clignoteOuverture
+      });
+    } else if (!r.trepied) {
+      e.push({
+        titre: 'Lis la vitesse calculée',
+        ou: 'En bas à gauche du viseur, le <b>1er nombre</b> est la vitesse choisie par l\'appareil (environ <span class="kbd">' + esc(vitesseBoitier(m.vitesse)) + '</span>).',
+        voir: 'Il faut au moins <span class="kbd">' + esc(vitesseBoitier(m.vitesseMini)) + '</span> (plus le chiffre est grand, plus c\'est rapide). En dessous : ' +
+          (cranPlus ? 'monte l\'ISO d\'un cran (' + cranPlus + '), ' : '') + 'appuie-toi contre un mur, ou sors le flash (bouton éclair à l\'avant, à gauche de l\'objectif).',
+        aide: [['Le flash rend la vitesse encore plus lente', 'Normal en Av : l\'appareil garde le fond éclairé (manuel p.282). Reste bien immobile, ou passe en Automatique.']].concat(AIDE.clignoteVitesse.slice(1))
+      });
+    }
+    e.push({
+      titre: 'Prends la photo',
+      ou: r.trepied ? 'Appuie à fond puis <b>lâche tout</b> : la photo part 2 secondes après.' : 'Appuie <b>doucement à fond</b>.' + (r.style === 'panning' ? ' Continue à suivre le sujet après le déclic.' : ''),
+      aide: AIDE.declenchement
+    });
+    e.push({
+      titre: 'Vérifie et ajuste',
+      ou: 'Bouton lecture <span class="kbd">▶</span> (bord droit de l\'écran, en bas). Trop sombre ou trop claire ? <b>Maintiens le bouton Av±</b> (bord droit de l\'écran, en haut) et tourne la molette : vers la droite = plus clair, vers la gauche = plus sombre.',
+      voir: 'Remets la correction à 0 après (manuel p.103).',
+      aide: AIDE.resultat.slice(0, 2)
+    });
+    return e;
+  }
+
   // Bulle « ça ne marche pas ? » : liste symptôme → solution
   function bulleAide(aide) {
     if (!aide || !aide.length) return '';
@@ -441,21 +557,47 @@
     var r = trouve.regle;
     var m = modeDe(styleId, r);
     var tv = m.id === 'Tv';
-    var cleRes = styleId + '+' + sujetId + '+' + situId;
+    var manuel = niveau() === 'manuel' && !!r.manuel;
+    var cleRes = styleId + '+' + sujetId + '+' + situId + (manuel ? '+manuel' : '');
     var cochees = etapesCochees[cleRes] || (etapesCochees[cleRes] = {});
-    var etapes = etapesPour(r);
+    var etapes = manuel ? etapesManuel(r) : etapesPour(r);
+
+    html += '<div class="segment niveau" role="group" aria-label="Façon de régler">' +
+      '<button type="button" data-niveau="auto" aria-pressed="' + !manuel + '">Automatique</button>' +
+      '<button type="button" data-niveau="manuel" aria-pressed="' + manuel + '">Je règle moi-même</button></div>' +
+      '<p class="aide-niveau">' + (manuel
+        ? 'Tu choisis toi-même ouverture, vitesse et ISO : plus de contrôle, et tu comprends ce qui fait l\'effet.'
+        : 'L\'appareil règle presque tout : le plus simple et le plus sûr.') + '</p>';
 
     if (trouve.repli) {
       html += '<p class="encart materiel"><strong>Réglage approché</strong>Pas de réglage exact pour « ' + esc(si.nom) + ' » : voici celui de la lumière la plus proche (« ' + esc(situation(r.situation).nom) + ' »). Vérifie bien le résultat à l\'écran.</p>';
     }
 
-    html += '<div class="reglages">' +
-      '<div class="tuile mode"><div class="valeur">' + esc(m.nom) + '</div><div><div class="etiquette">Molette des modes</div><div class="role">' + esc(m.role) + '</div></div></div>' +
-      (tv ? tuile('Vitesse', vitesseTexte(r.vitesse), 'Molette principale', false) : '') +
-      tuile('Zoom', r.focale + ' mm', r.focale === 85 ? 'Zoom au maximum' : r.focale === 17 ? 'Le plus large' : 'Bague de l\'objectif', false) +
-      (tv ? tuile('ISO', 'AUTO', 'L\'appareil l\'ajuste', true) : '') +
-      '</div>' +
-      (tv ? '' : '<p class="legende-tuiles">L\'appareil règle seul l\'ouverture, la vitesse et l\'ISO' + (m.id === 'portrait' || m.id === 'ca' ? ', et sort le flash si besoin' : '') + '.</p>');
+    if (manuel) {
+      var mm = r.manuel, mtv = mm.mode === 'Tv';
+      html += '<div class="reglages">' +
+        '<div class="tuile mode"><div class="valeur">' + icone(mm.mode, 40) + '</div><div><div class="etiquette">Molette des modes : ' + mm.mode + '</div><div class="role">' +
+        (mtv ? 'Tu choisis la vitesse, l\'appareil calcule l\'ouverture' : 'Tu choisis l\'ouverture, l\'appareil calcule la vitesse') + '</div></div></div>' +
+        tuile('Ouverture', mm.ouverture, 'Netteté du fond', mtv) +
+        tuile('Vitesse', vitesseTexte(mm.vitesse), 'Flou de mouvement', !mtv) +
+        tuile('ISO', String(mm.iso), 'Sensibilité', false) +
+        tuile('Zoom', r.focale + ' mm', r.focale === 85 ? 'Zoom au maximum' : r.focale === 17 ? 'Le plus large' : 'Bague de l\'objectif', false) +
+        '</div>' +
+        '<p class="legende-tuiles"><span class="l-toi">Tu règles</span><span class="l-auto">Calculé par l\'appareil (valeur attendue)</span></p>';
+      if (mm.limite) {
+        html += '<p class="encart materiel"><strong>⚠️ Lumière limite</strong>Même à ISO 6400, la photo sera lente (' + vitesseTexte(mm.vitesse) + ') : risque de flou à main levée. Appuie-toi, sors le flash, ou passe en « Automatique » qui gère le flash tout seul.</p>';
+      }
+      html += '<section class="section"><h2 class="section-titre">Comprendre l\'effet</h2><p class="section-aide">Quoi tourner pour obtenir plus ou moins d\'effet :</p><ul class="liste-aide">' +
+        s.leviers.map(function (l) { return '<li><strong>' + esc(l[0]) + '</strong><span>' + esc(l[1]) + '</span></li>'; }).join('') + '</ul></section>';
+    } else {
+      html += '<div class="reglages">' +
+        '<div class="tuile mode"><div class="valeur">' + icone(m.id, 40) + '<span>' + esc(m.nom) + '</span></div><div><div class="etiquette">Molette des modes</div><div class="role">' + esc(m.role) + '</div></div></div>' +
+        (tv ? tuile('Vitesse', vitesseTexte(r.vitesse), 'Molette principale', false) : '') +
+        tuile('Zoom', r.focale + ' mm', r.focale === 85 ? 'Zoom au maximum' : r.focale === 17 ? 'Le plus large' : 'Bague de l\'objectif', false) +
+        (tv ? tuile('ISO', 'AUTO', 'L\'appareil l\'ajuste', true) : '') +
+        '</div>' +
+        (tv ? '' : '<p class="legende-tuiles">L\'appareil règle seul l\'ouverture, la vitesse et l\'ISO' + (m.id === 'portrait' || m.id === 'ca' || m.id === 'gros_plan' ? ', et sort le flash si besoin' : '') + '.</p>');
+    }
 
     if (r.trepied) {
       html += '<p class="encart materiel"><strong>🔧 Trépied obligatoire</strong>La photo dure longtemps : à la main, elle serait floue.</p>';
@@ -476,6 +618,14 @@
     cadre({ titre: 'Réglages', retour: '#/style/' + styleId, onglet: 'styles', nuit: nuit, html: html });
 
     brancherEtapes(etapes, cochees, function () { vueResultat(styleId, sujetId, situId); });
+    $vue.querySelectorAll('[data-niveau]').forEach(function (b) {
+      b.onclick = function () {
+        choisirNiveau(b.getAttribute('data-niveau'));
+        var y = window.scrollY;
+        vueResultat(styleId, sujetId, situId);
+        window.scrollTo(0, y);
+      };
+    });
     document.getElementById('btn-fav').onclick = function () {
       var ajoute = basculerFavori(styleId, sujetId, situId);
       this.className = 'bouton ' + (ajoute ? 'secondaire' : '');
@@ -586,7 +736,7 @@
       '<a class="lien-carte" href="#/boutons"><span class="ico" aria-hidden="true">📷</span>Repérer les boutons de l\'appareil</a>' +
       '<a class="lien-carte" href="#/depannage"><span class="ico" aria-hidden="true">🛠️</span>Ça ne marche pas ? (dépannage)</a>' +
       '<a class="lien-carte" href="#/preparer"><span class="ico" aria-hidden="true">🎒</span>Préparer l\'appareil</a>' +
-      '<a class="lien-carte" href="#/bases"><span class="ico" aria-hidden="true">📖</span>Comprendre ouverture, vitesse et ISO</a>' +
+      '<a class="lien-carte" href="#/bases"><span class="ico" aria-hidden="true">📖</span>Quel réglage pour quel effet ?</a>' +
       '<a class="lien-carte" href="#/installer"><span class="ico" aria-hidden="true">📲</span>Installer l\'app sur l\'iPhone</a>' +
       '<section class="section"><h2 class="section-titre">À propos</h2>' +
       '<p class="section-aide">Réglages prévus pour le <b>' + esc(DONNEES.appareil) + '</b> avec l\'objectif <b>' + esc(DONNEES.objectif) + '</b>. ' +
@@ -614,6 +764,10 @@
       html += '<li><strong>' + r[0] + '. ' + esc(r[1]) + '</strong><span>' + esc(r[2]) + '</span></li>';
     });
     html += '<li><strong>Sur l\'objectif (côté gauche)</strong><span>Interrupteur AF/MF : toujours sur AF. Interrupteur STABILIZER : sur ON. La large bague en caoutchouc règle le zoom (17 à 85).</span></li></ul>' +
+      '<h2 class="section-titre section">Les symboles de la molette</h2><ul class="symboles">' +
+      [['auto', 'A+ : tout automatique'], ['portrait', 'Portrait'], ['paysage', 'Paysage'], ['gros_plan', 'Gros-plan'], ['sports', 'Sports'],
+        ['flash_annule', 'Flash annulé'], ['ca', 'Créatif auto'], ['Tv', 'Tv : tu choisis la vitesse'], ['Av', 'Av : tu choisis l\'ouverture']
+      ].map(function (x) { return '<li>' + icone(x[0], 32) + '<span>' + esc(x[1]) + '</span></li>'; }).join('') + '</ul>' +
       '<h2 class="section-titre section">Le dos</h2>' + schemaDos() + '<ul class="liste-aide">' +
       [['A', 'MENU', 'En haut à gauche. Ouvre les menus (réglages avancés, signal sonore…).'],
         ['B', 'INFO.', 'À côté de MENU. Change les informations affichées à l\'écran.'],
@@ -664,8 +818,21 @@
       '<li><strong>Vitesse (1/… s)</strong><span>Le temps pendant lequel la photo se prend. <b>Rapide</b> (1/1000 s) = le mouvement est <b>figé</b>. <b>Lente</b> (1/15 s, 4 s) = le mouvement devient <b>flou</b>, et il faut un trépied.</span></li>' +
       '<li><strong>ISO</strong><span>La sensibilité à la lumière. <b>100</b> = photo la plus propre, pour le plein jour. <b>3200 ou 6400</b> = pour le soir, mais la photo a du « grain ».</span></li>' +
       '<li><strong>Les modes à icônes</strong><span>Portrait, Paysage, Sports, Flash annulé, CA : l\'appareil règle lui-même ouverture, vitesse et ISO pour obtenir l\'effet. C\'est ce que l\'app utilise le plus souvent.</span></li>' +
-      '<li><strong>Mode Tv</strong><span>Tu choisis la vitesse, l\'appareil calcule le reste. Utilisé pour le panoramique filé et le filé d\'eau, les deux effets qui n\'ont pas d\'icône.</span></li>' +
-      '</ul>';
+      '<li><strong>Mode Tv</strong><span>Tu choisis la vitesse, l\'appareil calcule l\'ouverture. Pour figer ou montrer le mouvement.</span></li>' +
+      '<li><strong>Mode Av</strong><span>Tu choisis l\'ouverture, l\'appareil calcule la vitesse. Pour décider de ce qui est net ou flou.</span></li>' +
+      '</ul>' +
+      '<section class="section"><h2 class="section-titre">Je veux… je règle…</h2>' +
+      '<table class="table-lecture"><thead><tr><th>Je veux</th><th>Je règle (en Av ou Tv)</th></tr></thead><tbody>' +
+      '<tr><td>Un fond plus flou</td><td>Av, <b>petit chiffre</b> (f/5.6), zoom 85, sujet proche, fond loin</td></tr>' +
+      '<tr><td>Tout net, devant et derrière</td><td>Av, <b>grand chiffre</b> (f/11), zoom 17</td></tr>' +
+      '<tr><td>Figer un mouvement</td><td>Tv, <b>vitesse rapide</b> (1/500 à 1/1000)</td></tr>' +
+      '<tr><td>Montrer le mouvement (filé)</td><td>Tv, <b>vitesse lente</b> (1/30), en suivant le sujet</td></tr>' +
+      '<tr><td>De l\'eau soyeuse</td><td>Tv, <b>vitesse très lente</b> (1/8 à plusieurs secondes), trépied, ISO 100</td></tr>' +
+      '<tr><td>Une photo plus claire</td><td>Maintiens <b>Av±</b> et tourne la molette vers la droite</td></tr>' +
+      '<tr><td>Moins de flou quand il fait sombre</td><td><b>ISO plus haut</b>, ou flash (bouton éclair), ou trépied</td></tr>' +
+      '<tr><td>Du noir et blanc</td><td>Flèche <b>▼</b> de la croix → style « Monochrome »</td></tr>' +
+      '</tbody></table></section>' +
+      '<section class="section"><h2 class="section-titre">Le triangle d\'exposition</h2><p class="section-aide">Ouverture, vitesse et ISO se compensent : si tu en changes un, l\'appareil ajuste l\'autre pour garder la même luminosité. En Av, fermer l\'ouverture (f/5.6 → f/11) rend la vitesse 4 fois plus lente. Pour compenser, multiplie l\'ISO par 4.</p></section>';
     cadre({ titre: 'Les bases', retour: '#/aide', onglet: 'aide', html: html });
   }
 
@@ -695,7 +862,7 @@
   function vueExpress() {
     var etapes = [
       { titre: 'Allume l\'appareil', ou: 'Interrupteur <b>sur le dessus, à droite</b> : mets-le sur <span class="kbd">ON</span>.', aide: AIDE.allumage },
-      { titre: 'Molette des modes sur A+', ou: 'Tourne la <b>grande molette sur le dessus, à droite</b> jusqu\'à l\'icône <b>A+</b> (petit cadre avec un A et un +).', voir: 'L\'appareil analyse la scène et règle tout seul, flash compris.', aide: AIDE.molette },
+      { titre: 'Molette des modes sur A+', ou: 'Tourne la <b>grande molette sur le dessus, à droite</b> jusqu\'à ce symbole ' + icone('auto', 26) + ' (<b>A+</b>, petit cadre avec un A et un +).', voir: 'L\'appareil analyse la scène et règle tout seul, flash compris.', aide: AIDE.molette },
       { titre: 'Cadre avec le zoom', ou: 'Tourne la <b>large bague en caoutchouc</b> : vers <b>85</b> pour te rapprocher du sujet, vers <b>17</b> pour en voir plus.', aide: AIDE.zoom },
       { titre: 'Vise et appuie à moitié', ou: 'Place le sujet <b>au centre du viseur</b> et appuie <b>à moitié</b> sur le déclencheur.', voir: 'Un « bip » et le <b>point vert</b> en bas à droite du viseur : c\'est net.', aide: AIDE.miseAuPoint },
       { titre: 'Appuie à fond', ou: 'Appuie <b>doucement à fond</b>, sans donner de coup.', voir: 'La photo s\'affiche 2 secondes à l\'écran.', aide: AIDE.declenchement },

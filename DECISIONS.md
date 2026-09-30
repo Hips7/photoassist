@@ -22,6 +22,7 @@ Ce fichier prime sur les CDC en cas de conflit.
 | Export/import JSON des favoris | Reporté en v2 | Risque ITP faible si l'app est ouverte depuis l'écran d'accueil. |
 | Styles ajoutés (v3) | **Gros-plan** (mode fleur, sujet « fleur ou petit objet ») et **Noir & blanc** (ambiance Monochrome via Q, en mode Portrait ou Paysage selon le sujet). | Fonctions intégrées du 600D (manuel p.61, p.65-66), aucune valeur à régler. |
 | Aides (v3) | Bulle « Ça ne marche pas ? » sur chaque étape, écrans Photo express (mode A+), Préparer l'appareil, Dépannage, schéma du dos, astuces du manuel par style. | Retour terrain : utiliser tout le mode d'emploi. Contenu tiré du guide de dépannage p.278-287. |
+| Deux façons de régler (v4) | Bascule **Automatique / Je règle moi-même** sur l'écran Réglages (choix mémorisé). Manuel = Av ou Tv avec ouverture, vitesse, ISO calculés + rubrique « Comprendre l'effet » + étapes (style d'image Monochrome, correction d'exposition Av±, flash). Symboles de la molette dessinés en SVG. | Retour terrain : garder le contrôle et comprendre quel réglage donne quel effet. |
 | Photos des vignettes | Photos libres de droits (Unsplash / Pexels) | Crédit photographe affiché. À remplacer par ses propres photos plus tard si souhaité. |
 
 ## Table de compatibilité style → sujets
@@ -45,9 +46,9 @@ Toutes les situations lumineuses sont proposées. Les combinaisons physiquement 
 | Plein soleil | 15 |
 | Ciel voilé | 13 |
 | Ombre | 12 |
-| Intérieur lumineux | 8 |
-| Intérieur sombre | 6 |
-| Nuit / éclairage artificiel | 4 |
+| Intérieur lumineux | 7 |
+| Intérieur sombre | 5 |
+| Nuit / éclairage artificiel | 3 |
 
 Chaque règle Tv est contrôlée automatiquement (`tools/verif_table.js`) : avec ISO AUTO (100-6400), il doit exister une ouverture possible (f/4-5.6 à f/22) pour cette vitesse et cette lumière. Les règles en mode intégré ne doivent imposer aucune valeur.
 
@@ -64,3 +65,4 @@ Chaque règle Tv est contrôlée automatiquement (`tools/verif_table.js`) : avec
 - 2026-09-30 — Test « Fond flou » : l'ancien seuil « vitesse ≥ 60 » était irréaliste en intérieur. Le « 9 » vu dans le viseur est le compteur de rafale, pas la vitesse. Refonte vers les modes intégrés (voir Périmètre) ; guide basé sur le mode d'emploi officiel (`docs/`, non publié : droits Canon).
 - 2026-09-30 — Bouton DISP. : **sur le dessus** (manuel p.18), pas au dos. Au dos en haut à gauche = INFO.
 - 2026-09-30 — En modes à icônes, seul le retardateur 10 s est disponible (manuel p.64) ; 2 s uniquement en Tv.
+- 2026-09-30 — Niveaux de lumière intérieur et nuit baissés d'1 IL (7 / 5 / 3) : le test « Fond flou » donnait 1/15 là où l'ancienne table promettait 1/60. Les réglages manuels sont calculés sur ces niveaux ; 8 cas sont marqués « lumière limite » (ISO 6400 insuffisant) et l'app le dit.

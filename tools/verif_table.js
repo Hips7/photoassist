@@ -6,7 +6,8 @@ const path = require('path');
 const data = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'reglages.json'), 'utf8'));
 
 // Niveau de lumière de chaque situation (EV à ISO 100) — cf. DECISIONS.md
-const EV = { plein_soleil: 15, ciel_voile: 13, ombre: 12, interieur_lumineux: 8, interieur_sombre: 6, nuit: 4 };
+const EV = { plein_soleil: 15, ciel_voile: 13, ombre: 12, interieur_lumineux: 7, interieur_sombre: 5, nuit: 3 };
+const OUVERTURES = [4, 4.5, 5, 5.6, 6.3, 7.1, 8, 9, 10, 11, 13, 14, 16, 18, 20, 22];
 const ISO_AUTO = [100, 200, 400, 800, 1600, 3200, 6400]; // plage ISO AUTO en Tv (manuel p.80)
 const VITESSES_600D = ['1/4000','1/3200','1/2500','1/2000','1/1600','1/1250','1/1000','1/800','1/640','1/500','1/400','1/320','1/250','1/200','1/160','1/125','1/100','1/80','1/60','1/50','1/40','1/30','1/25','1/20','1/15','1/13','1/10','1/8','1/6','1/5','1/4','0.3','0.4','0.5','0.6','0.8','1','1.3','1.6','2','2.5','3.2','4','5','6','8','10','13','15','20','25','30'];
 // Ouverture max du 17-85 selon la focale (valeur la plus petite possible)
@@ -50,6 +51,22 @@ for (const r of data.regles) {
 
   if (r.mode && !modesIds.has(r.mode)) erreurs.push(`Mode inconnu ${r.mode} : ${cle}`);
   const mode = r.mode || (style && style.modeAppareil);
+
+  // Réglages manuels (mode « Je règle moi-même ») : présents et cohérents avec la lumière
+  const m = r.manuel;
+  if (!m) erreurs.push(`Réglage manuel manquant : ${cle}`);
+  else {
+    const N = Number(m.ouverture.replace('f/', ''));
+    if (!['Av', 'Tv'].includes(m.mode)) erreurs.push(`Mode manuel invalide : ${cle}`);
+    if (!ISO_AUTO.includes(m.iso)) erreurs.push(`ISO manuel invalide ${m.iso} : ${cle}`);
+    if (!VITESSES_600D.includes(m.vitesse)) erreurs.push(`Vitesse manuelle invalide ${m.vitesse} : ${cle}`);
+    if (!OUVERTURES.includes(N)) erreurs.push(`Ouverture manuelle invalide ${m.ouverture} : ${cle}`);
+    if (N < OUV_MAX[r.focale] || N > OUV_MIN) erreurs.push(`Ouverture ${m.ouverture} impossible à ${r.focale} mm : ${cle}`);
+    const ev = Math.log2(N * N / secondes(m.vitesse)) - Math.log2(m.iso / 100);
+    if (!m.limite && Math.abs(ev - EV[r.situation]) > 0.7) erreurs.push(`Exposition manuelle fausse (écart ${(ev - EV[r.situation]).toFixed(2)} IL) : ${cle}`);
+    if (m.limite && m.iso !== 6400 && !r.trepied) erreurs.push(`« limite » alors que l'ISO peut encore monter : ${cle}`);
+    if (!r.trepied && !m.limite && m.vitesseMini && secondes(m.vitesse) > secondes(m.vitesseMini) * 1.12) erreurs.push(`Vitesse manuelle trop lente sans alerte : ${cle}`);
+  }
   if (MODES_SCENE.includes(mode)) {
     // Modes automatiques : l'appareil règle tout, aucune valeur ne doit être imposée
     if (r.vitesse || r.iso || r.ouverture) erreurs.push(`Valeur imposée en mode automatique : ${cle}`);

@@ -13,6 +13,8 @@ Restent quelques positions que le manuel montre en dessin mais pas en texte.
 | 4 | Les schémas « dessus » et « dos » correspondent à l'appareil | Aide → Repérer les boutons |
 | 5 | Noir & blanc : après Q, la ligne « Réglage standard » permet bien de choisir « Monochrome » | Style Noir & blanc |
 | 6 | La petite molette à droite du viseur rend bien le viseur net | Préparer l'appareil |
+| 7 | Bouton **flash** (éclair) : à l'avant, à gauche de l'objectif quand on tient l'appareil | Mode « Je règle moi-même » |
+| 8 | Mode manuel : les valeurs lues dans le viseur sont proches de celles annoncées (sinon noter style + lumière + valeur lue) | Tous les styles |
 
 ## Sur les réglages (au fil des sorties photo)
 

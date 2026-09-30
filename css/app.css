@@ -361,3 +361,14 @@ body.theme-nuit .toast { background: #2A0604; color: var(--texte); }
 
 ul.astuces { margin: 4px 0 0; padding-left: 20px; }
 ul.astuces li + li { margin-top: 6px; }
+
+/* ---------- Automatique / Je règle moi-même ---------- */
+.segment.niveau { display: flex; margin-top: 16px; }
+.segment.niveau button { flex: 1; min-height: 44px; }
+.aide-niveau { margin-top: 8px; font-size: 16px; color: var(--texte-2); }
+
+/* ---------- Symboles de la molette ---------- */
+.icone-mode { display: inline-block; vertical-align: middle; flex: none; }
+.tuile.mode .valeur { display: flex; align-items: center; gap: 8px; }
+.symboles { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.symboles li { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--surface); border: 1px solid var(--bordure); border-radius: 12px; font-size: 16px; line-height: 1.25; }
