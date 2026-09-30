@@ -1,2 +1,4 @@
 *.original.md
 graphify-out/
+docs/*.pdf
+docs/*.txt

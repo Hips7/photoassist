@@ -33,6 +33,8 @@ La table de correspondance (styles × situations lumineuses × catégories de su
 1. `DECISIONS.md` — arbitrages validés, prime sur tout le reste
 2. `CDC_PhotoAssist_v1.1.md` — révision du CDC
 3. `CDC_PhotoAssist.md` — CDC initial (v1)
+4. `docs/manuel_600D_FR.pdf` (+ `.txt` pour la recherche) — mode d'emploi officiel Canon. **Toute indication sur un bouton ou un menu doit y être vérifiée.** Non publié sur GitHub (droits Canon) : si absent, le retélécharger :
+   `curl -L -o docs/manuel_600D_FR.pdf http://gdlp01.c-wss.com/gds/8/0300008088/01/EOS_600D_Instruction_Manual_FR.pdf`
 
 ## Déploiement
 

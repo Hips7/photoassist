@@ -207,7 +207,7 @@ p { margin: 0; }
 }
 .tuile.auto { border: 2px dashed var(--bordure); background: var(--surface-2); }
 .tuile.mode { grid-column: 1 / -1; display: flex; align-items: center; gap: 14px; background: var(--accent); color: var(--accent-texte); border: 0; }
-.tuile.mode .valeur { font-size: 44px; }
+.tuile.mode .valeur { font-size: 30px; white-space: normal; flex: none; max-width: 48%; }
 .tuile.mode .etiquette, .tuile.mode .role { color: inherit; opacity: .9; }
 .tuile .etiquette { font-size: 16px; font-weight: 650; color: var(--texte-2); }
 .tuile .valeur { font-size: 34px; font-weight: 800; letter-spacing: -.02em; line-height: 1.1; font-variant-numeric: tabular-nums; white-space: nowrap; }

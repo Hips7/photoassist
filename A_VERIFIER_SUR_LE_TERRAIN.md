@@ -1,20 +1,21 @@
 # À vérifier sur le terrain
 
-Ce qui n'a pas pu être contrôlé sans l'appareil ni l'iPhone en main.
+Le guide est désormais basé sur le mode d'emploi officiel Canon 600D (`docs/`).
+Restent quelques positions que le manuel montre en dessin mais pas en texte.
 
 ## Sur le Canon 600D (5 min, appareil en main)
 
 | # | Point | Où dans l'app |
 |---|---|---|
-| 1 | Le bouton pour rallumer l'écran s'appelle bien **DISP.** (au dos, en haut à gauche) | Étape « Allume l'appareil » |
-| 2 | La flèche gauche de la croix ouvre bien le menu du **retardateur** (DRIVE) | Étape « Retardateur 2 secondes » (Paysage nuit, Filé d'eau) |
-| 3 | Le bouton **loupe** est bien au dos en haut à droite | Étape « Regarde le résultat » |
+| 1 | Le bouton **DISP.** est bien sur le dessus, à côté du bouton ISO | Étape « Allume l'appareil » |
+| 2 | Le bouton **Q** est bien au dos, près de la croix | Portrait net (mode CA) |
+| 3 | En mode **CA**, la ligne « flou ↔ net » se règle bien avec la molette principale | Portrait net |
 | 4 | Le schéma « Repérer les boutons » correspond à l'appareil | Aide → Repérer les boutons |
 
 ## Sur les réglages (au fil des sorties photo)
 
-Les 51 réglages sont calculés pour l'objectif 17-85 et contrôlés automatiquement (`node tools/verif_table.js`).
-Ce sont des points de départ : si une photo sort trop sombre ou trop claire dans une situation donnée, noter le style + sujet + lumière et l'écart constaté. La correction se fait dans `data/reglages.json`.
+- Les 5 styles à icônes (Fond flou, Portrait net, Paysage, Action figée, Nuit) : l'appareil règle tout. Noter si un résultat déçoit.
+- Les 2 styles en Tv (Panoramique filé, Filé d'eau) : vitesses contrôlées automatiquement (`node tools/verif_table.js`). Si l'ouverture clignote souvent dans une situation, noter style + lumière.
 
 ## Sur l'iPhone
 

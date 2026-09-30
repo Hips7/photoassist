@@ -38,9 +38,6 @@
     if (v.indexOf('/') > -1) return v.split('/')[1];
     return v.replace('.', '"') + (v.indexOf('.') > -1 ? '' : '"');
   }
-  function ouvertureBoitier(o) { return o.replace('f/', ''); }
-  // Une vitesse deux fois plus lente, pour donner un exemple concret
-  var PLUS_LENT = { '1/125': '1/60', '1/60': '1/30', '1/30': '1/15', '1/15': '1/8' };
 
   var ORDRE_LUMIERE = ['nuit', 'interieur_sombre', 'interieur_lumineux', 'ombre', 'ciel_voile', 'plein_soleil'];
 
@@ -233,112 +230,96 @@
 
   // ---------- Écran 3 : Résultat ----------
 
+  // Mode de la molette pour un style (Portrait, Paysage, Sports, Flash annulé, CA ou Tv)
+  function modeDe(styleId) {
+    var id = style(styleId).modeAppareil;
+    return DONNEES.modes.filter(function (m) { return m.id === id; })[0];
+  }
+
+  // Étapes basées sur le mode d'emploi Canon 600D : on utilise les modes intégrés
+  // de la molette et l'ISO AUTO, l'appareil règle lui-même ce qu'il sait régler.
   function etapesPour(r) {
     var e = [];
-    var tv = r.mode === 'Tv';
-    var cran = r.iso === 6400 ? null : r.iso * 2;
+    var m = modeDe(r.style);
+    var tv = m.id === 'Tv';
 
     e.push({
       titre: 'Allume l\'appareil',
-      ou: 'L\'interrupteur est <b>sur le dessus, à droite</b>, juste à côté de la grande molette des modes. Mets-le sur <span class="kbd">ON</span>.',
-      voir: 'L\'écran au dos s\'allume. S\'il reste noir, appuie sur le bouton <span class="kbd">DISP.</span> (au dos, en haut à gauche).'
+      ou: 'Interrupteur <b>sur le dessus, à droite</b>, à côté de la grande molette des modes : mets-le sur <span class="kbd">ON</span>.',
+      voir: 'L\'écran au dos affiche les réglages. S\'il reste noir, appuie sur le bouton <span class="kbd">DISP.</span> (sur le dessus, à côté du bouton ISO).'
     });
-    if (r.trepied) {
+    e.push({
+      titre: 'Molette des modes sur « ' + m.nom + ' »',
+      ou: 'Tourne la <b>grande molette sur le dessus, à droite</b> jusqu\'à ' + esc(m.repere) + ', face au trait blanc.',
+      voir: esc(m.role)
+    });
+    if (m.id === 'ca') {
       e.push({
-        titre: 'Installe l\'appareil sur le trépied',
-        ou: 'Visse la plaque du trépied <b>sous l\'appareil</b>, puis serre toutes les molettes du trépied.',
-        voir: 'L\'appareil ne bouge plus du tout quand tu le lâches.'
+        titre: 'Choisis « arrière-plan net »',
+        ou: 'Appuie sur le bouton <span class="kbd">Q</span> (au dos, près de la croix). Avec les flèches de la croix, va sur la ligne <b>flou ↔ net</b>. Tourne la <b>molette principale</b> (derrière le déclencheur) <b>vers la droite</b>, jusqu\'au bout.',
+        voir: 'Le curseur est côté « net ». Appuie à moitié sur le déclencheur pour revenir.'
       });
     }
-    e.push({
-      titre: 'Prépare l\'objectif',
-      ou: 'Sur le <b>côté gauche de l\'objectif</b>, il y a deux petits interrupteurs : mets <span class="kbd">AF/MF</span> sur <b>AF</b> et <span class="kbd">STABILIZER</span> sur <b>' + (r.trepied ? 'OFF' : 'ON') + '</b>.',
-      voir: r.trepied ? 'Stabilisateur sur OFF : sur trépied, il peut créer du flou.' : 'Le stabilisateur réduit le flou quand tu tiens l\'appareil à la main.'
-    });
-    e.push({
-      titre: 'Règle le zoom sur ' + r.focale + ' mm',
-      ou: 'Tourne la <b>large bague en caoutchouc</b> de l\'objectif (celle où sont écrits les chiffres de 17 à 85) jusqu\'à ce que <b>' + r.focale + '</b> soit face au petit trait blanc.',
-      voir: r.focale === 85 ? '85 = zoom au maximum (bague tournée jusqu\'au bout).' : r.focale === 17 ? '17 = le plus large, tu vois le plus de choses (bague tournée jusqu\'au bout).' : 'Pas besoin d\'être au millimètre près.'
-    });
-    e.push({
-      titre: 'Tourne la molette des modes sur ' + r.mode,
-      ou: 'C\'est la <b>grande molette sur le dessus, à droite</b>, derrière le déclencheur. Tourne-la jusqu\'à ce que <span class="kbd">' + r.mode + '</span> soit face au trait blanc.',
-      voir: tv
-        ? 'Mode Tv : <b>tu choisis la vitesse</b>, l\'appareil règle l\'ouverture tout seul.'
-        : 'Mode Av : <b>tu choisis l\'ouverture</b>, l\'appareil règle la vitesse tout seul.'
-    });
     if (tv) {
       e.push({
         titre: 'Règle la vitesse sur ' + vitesseTexte(r.vitesse),
-        ou: 'Tourne la <b>molette principale</b> : la petite molette crantée sur le dessus, <b>juste derrière le déclencheur</b>, sous ton index.',
-        voir: 'L\'appareil affiche <span class="kbd">' + esc(vitesseBoitier(r.vitesse)) + '</span>' + (r.vitesse.indexOf('/') > -1 ? ' (il n\'écrit pas le « 1/ »).' : ' (le signe " veut dire secondes).')
-      });
-    } else {
-      e.push({
-        titre: 'Règle l\'ouverture sur ' + r.ouverture,
-        ou: 'Tourne la <b>molette principale</b> : la petite molette crantée sur le dessus, <b>juste derrière le déclencheur</b>, sous ton index.',
-        voir: 'L\'écran affiche <span class="kbd">F' + ouvertureBoitier(r.ouverture) + '</span>. S\'il refuse de descendre jusqu\'à ' + ouvertureBoitier(r.ouverture) + ', vérifie le zoom (étape précédente).'
+        ou: 'Tourne la <b>molette principale</b> : la petite molette crantée <b>juste derrière le déclencheur</b>, sous ton index.',
+        voir: 'L\'écran affiche <span class="kbd">' + esc(vitesseBoitier(r.vitesse)) + '</span>' + (r.vitesse.indexOf('/') > -1 ? ' (l\'appareil n\'écrit pas le « 1/ »).' : ' (le signe " veut dire secondes).') +
+          ' L\'ISO doit être sur <b>AUTO</b> : sinon, bouton <span class="kbd">ISO</span> sur le dessus → AUTO → <span class="kbd">SET</span>.'
       });
     }
     e.push({
-      titre: 'Règle l\'ISO sur ' + r.iso,
-      ou: 'Appuie une fois sur le bouton <span class="kbd">ISO</span> (sur le dessus, <b>juste derrière la molette principale</b>). Tourne la molette principale jusqu\'à <b>' + r.iso + '</b>, puis appuie sur <span class="kbd">SET</span> (le bouton au centre de la croix, au dos).',
-      voir: 'L\'écran affiche <b>ISO ' + r.iso + '</b>. Il ne doit pas être sur AUTO.'
+      titre: 'Zoom sur ' + r.focale + ' mm',
+      ou: 'Tourne la <b>large bague en caoutchouc</b> de l\'objectif jusqu\'à ce que <b>' + r.focale + '</b> soit face au petit trait blanc.',
+      voir: r.focale === 85 ? '85 = zoom au maximum (bague tournée jusqu\'au bout).' : r.focale === 17 ? '17 = le plus large (bague tournée jusqu\'au bout dans l\'autre sens).' : 'Pas besoin d\'être au millimètre près.'
     });
-    if (r.retardateur) {
+    if (r.trepied) {
+      var dixSec = !tv; // en mode automatique, seul le retardateur 10 s est disponible (manuel p.64)
       e.push({
-        titre: 'Active le retardateur 2 secondes',
-        ou: 'Au dos, appuie sur la <b>flèche gauche de la croix</b> (marquée <span class="kbd">DRIVE</span> ou d\'un petit rectangle). Choisis l\'icône <b>horloge avec un « 2 »</b> avec les flèches, puis appuie sur <span class="kbd">SET</span>.',
-        voir: 'Une petite horloge « 2 » apparaît à l\'écran. Ainsi, ton doigt ne fait pas bouger l\'appareil au moment de la photo. Pense à remettre le rectangle simple après.'
+        titre: 'Trépied + retardateur ' + (dixSec ? '10' : '2') + ' secondes',
+        ou: 'Pose l\'appareil sur le trépied. Puis au dos, appuie sur la <b>flèche gauche de la croix</b> (mode d\'acquisition) et choisis l\'<b>horloge « ' + (dixSec ? '10' : '2') + ' »</b>, puis <span class="kbd">SET</span>.',
+        voir: 'L\'icône horloge s\'affiche à l\'écran : ton doigt ne fera pas bouger l\'appareil. Pense à revenir sur le rectangle simple après.'
       });
     }
     e.push({
-      titre: 'Cadre et fais la mise au point',
-      ou: 'Regarde dans le viseur. ' + (r.style === 'panning' ? 'Suis le sujet en tournant tout le haut du corps. ' : '') +
-        'Appuie <b>à moitié</b> sur le déclencheur, sans aller au bout, et garde-le enfoncé à moitié.',
-      voir: 'Un « bip » et un <b>point vert</b> allumé en bas à droite du viseur : c\'est net.'
+      titre: 'Vise et fais la mise au point',
+      ou: m.id === 'sports'
+        ? 'Place le <b>carré central</b> du viseur sur le sujet et appuie <b>à moitié</b> sur le déclencheur. Garde-le à moitié en suivant le sujet.'
+        : r.style === 'panning'
+          ? 'Place le <b>carré central</b> du viseur sur le sujet et suis-le en tournant le haut du corps, déclencheur <b>à moitié</b> enfoncé.'
+          : 'Place le sujet dans le viseur et appuie <b>à moitié</b> sur le déclencheur, sans aller au bout.' + (m.id === 'portrait' ? ' Vise le <b>visage</b>.' : ''),
+      voir: m.id === 'sports' || r.style === 'panning'
+        ? 'Un petit bip continu : l\'appareil suit le sujet. C\'est normal que le point vert ne reste pas allumé.'
+        : 'Un « bip » et le <b>point vert</b> s\'allume à droite, en bas du viseur : c\'est net.'
     });
     if (tv) {
-      var clair = r.iso === 100
-        ? 'Il clignote sur <b>22</b> : trop de lumière pour cet effet, tourne la molette d\'un cran vers une vitesse plus rapide.'
-        : 'Il clignote sur <b>22</b> : trop clair, baisse l\'ISO d\'un cran (' + (r.iso / 2) + ').';
-      var sombre = cran
-        ? 'Il clignote sur un <b>petit chiffre</b> (4, 5 ou 5.6) : trop sombre, monte l\'ISO d\'un cran (' + cran + ').'
-        : 'Il clignote sur un <b>petit chiffre</b> (4, 5 ou 5.6) : trop sombre, l\'ISO est déjà au maximum, cherche un endroit plus éclairé.';
       e.push({
-        titre: 'Vérifie que rien ne clignote',
-        ou: 'Toujours à moitié enfoncé, regarde <b>en bas du viseur</b> le chiffre de l\'ouverture choisi par l\'appareil (environ <b>' + ouvertureBoitier(r.ouverture) + '</b>).',
-        voir: 'S\'il est fixe, tout va bien. ' + sombre + ' ' + clair
+        titre: 'Regarde si l\'ouverture clignote',
+        ou: 'En bas du viseur, le <b>2e nombre</b> est l\'ouverture choisie par l\'appareil (le 1er, à gauche, est ta vitesse).',
+        voir: 'Fixe : tout va bien. Clignote sur un <b>petit nombre</b> (4 ou 5.6) : trop sombre → tourne la molette principale <b>vers la gauche</b> (plus lent). Clignote sur <b>22</b> : trop clair → molette <b>vers la droite</b> (plus rapide).'
       });
-    } else if (r.trepied) {
+    } else if (!r.trepied) {
       e.push({
-        titre: 'Vérifie la vitesse',
-        ou: 'Toujours à moitié enfoncé, regarde <b>en bas du viseur, à gauche</b> : c\'est la durée de la photo choisie par l\'appareil.',
-        voir: 'Environ <span class="kbd">' + esc(vitesseBoitier(r.vitesse)) + '</span>, soit ' + vitesseTexte(r.vitesse) + '. C\'est normal que ce soit long : l\'appareil est sur trépied.'
-      });
-    } else {
-      var lent = PLUS_LENT[r.vitesseMini];
-      e.push({
-        titre: 'Vérifie la vitesse',
-        ou: 'Toujours à moitié enfoncé, regarde <b>en bas du viseur, à gauche</b> : c\'est la vitesse choisie par l\'appareil (environ <b>' + esc(vitesseBoitier(r.vitesse)) + '</b>).',
-        voir: 'Elle doit être d\'au moins <span class="kbd">' + esc(vitesseBoitier(r.vitesseMini)) + '</span> : plus le chiffre est grand, plus c\'est rapide. ' +
-          (lent ? 'Si tu vois plus petit (ex. ' + esc(vitesseBoitier(lent)) + '), ' : 'Si tu vois plus petit, ') +
-          (cran ? 'la photo risque d\'être floue : monte l\'ISO d\'un cran (' + cran + ').' : 'la photo risque d\'être floue : l\'ISO est déjà au maximum, rapproche-toi d\'une lumière ou appuie-toi contre un mur.')
+        titre: 'Regarde si la vitesse clignote',
+        ou: 'Toujours à moitié enfoncé, regarde le <b>1er nombre en bas à gauche du viseur</b> : c\'est la vitesse choisie par l\'appareil.',
+        voir: 'Fixe : tout va bien. S\'il <b>clignote</b>, l\'appareil te prévient d\'un risque de flou : appuie-toi contre un mur ou une table et tiens-toi bien immobile' + (r.focale > 17 ? ', ou dézoome vers 17' : '') + '. Le chiffre isolé tout à droite (ex. 9) n\'est pas la vitesse : c\'est le nombre de photos en rafale, ignore-le.'
       });
     }
     e.push({
       titre: 'Prends la photo',
-      ou: r.retardateur
-        ? 'Appuie <b>à fond</b> sur le déclencheur puis <b>lâche tout</b>. La photo se prend seule 2 secondes plus tard.'
-        : r.style === 'panning'
-          ? 'Appuie <b>à fond</b> en continuant à suivre le sujet, et continue à le suivre après le déclic.'
-          : 'Appuie <b>doucement à fond</b> sur le déclencheur, sans donner de coup.',
-      voir: r.trepied ? 'Ne touche à rien avant le second « clac » de fin de photo.' : 'Un « clac » : la photo est prise.'
+      ou: r.trepied
+        ? 'Appuie <b>à fond</b> sur le déclencheur puis <b>lâche tout</b> : la photo se prend seule quelques secondes plus tard.'
+        : m.id === 'sports'
+          ? 'Appuie <b>à fond</b> au bon moment. Garde le doigt appuyé pour une rafale (plusieurs photos par seconde).'
+          : r.style === 'panning'
+            ? 'Appuie <b>à fond</b> sans arrêter de suivre le sujet, et continue à le suivre après le déclic.'
+            : 'Appuie <b>doucement à fond</b> sur le déclencheur, sans donner de coup.',
+      voir: r.trepied ? 'Ne touche à rien avant le « clac » de fin de photo.' : 'Un « clac » : la photo est prise et s\'affiche 2 secondes à l\'écran.'
     });
     e.push({
       titre: 'Regarde le résultat',
-      ou: 'Appuie sur le bouton lecture <span class="kbd">▶</span> au dos, <b>à droite, sous la croix</b>. Zoome sur la photo avec le bouton loupe (en haut à droite, au dos).',
-      voir: 'Trop sombre ? Monte l\'ISO d\'un cran. Trop claire ? Baisse-le d\'un cran. Floue ? Relis le conseil plus bas.'
+      ou: 'Bouton lecture <span class="kbd">▶</span> au dos, en bas à droite. Pour zoomer dans la photo : bouton loupe, au dos en haut à droite.',
+      voir: 'Floue ? Relis le conseil ci-dessous. Pour revenir à la prise de vue, appuie à moitié sur le déclencheur.'
     });
     return e;
   }
@@ -373,7 +354,8 @@
     }
 
     var r = trouve.regle;
-    var tv = r.mode === 'Tv';
+    var m = modeDe(styleId);
+    var tv = m.id === 'Tv';
     var cleRes = styleId + '+' + sujetId + '+' + situId;
     var cochees = etapesCochees[cleRes] || (etapesCochees[cleRes] = {});
     var etapes = etapesPour(r);
@@ -383,14 +365,12 @@
     }
 
     html += '<div class="reglages">' +
-      '<div class="tuile mode"><div class="valeur">' + r.mode + '</div><div><div class="etiquette">Mode</div><div class="role">' +
-      (tv ? 'Tu choisis la vitesse, l\'appareil fait le reste' : 'Tu choisis l\'ouverture, l\'appareil fait le reste') + '</div></div></div>' +
-      tuile('Ouverture', r.ouverture, 'Règle le flou de l\'arrière-plan', tv) +
-      tuile('Vitesse', vitesseTexte(r.vitesse), 'Règle le flou de mouvement', !tv) +
-      tuile('ISO', String(r.iso), 'Sensibilité à la lumière', false) +
+      '<div class="tuile mode"><div class="valeur">' + esc(m.nom) + '</div><div><div class="etiquette">Molette des modes</div><div class="role">' + esc(m.role) + '</div></div></div>' +
+      (tv ? tuile('Vitesse', vitesseTexte(r.vitesse), 'Molette principale', false) : '') +
       tuile('Zoom', r.focale + ' mm', r.focale === 85 ? 'Zoom au maximum' : r.focale === 17 ? 'Le plus large' : 'Bague de l\'objectif', false) +
+      (tv ? tuile('ISO', 'AUTO', 'L\'appareil l\'ajuste', true) : '') +
       '</div>' +
-      '<p class="legende-tuiles"><span class="l-toi">Tu règles</span><span class="l-auto">L\'appareil le fait seul (valeur indicative)</span></p>';
+      (tv ? '' : '<p class="legende-tuiles">L\'appareil règle seul l\'ouverture, la vitesse et l\'ISO' + (m.id === 'portrait' || m.id === 'ca' ? ', et sort le flash si besoin' : '') + '.</p>');
 
     if (r.trepied) {
       html += '<p class="encart materiel"><strong>🔧 Trépied obligatoire</strong>La photo dure longtemps : à la main, elle serait floue.</p>';
@@ -445,7 +425,7 @@
 
   function tuile(etiquette, valeur, role, auto) {
     return '<div class="tuile' + (auto ? ' auto' : '') + '"><div class="etiquette">' + etiquette + '</div>' +
-      '<div class="valeur">' + (auto ? '≈ ' : '') + esc(valeur) + '</div><div class="role">' + role + '</div>' +
+      '<div class="valeur">' + (auto && valeur !== 'AUTO' ? '≈ ' : '') + esc(valeur) + '</div><div class="role">' + role + '</div>' +
       '<span class="badge">' + (auto ? 'Automatique' : 'Tu règles') + '</span></div>';
   }
 
@@ -522,27 +502,27 @@
 
   function vueBoutons() {
     var reperes = [
-      ['1', 'Molette des modes', 'Dessus, à droite, derrière le déclencheur. La grande molette avec Av, Tv, M…'],
-      ['2', 'Interrupteur ON / OFF', 'Dessus, à droite, juste à côté de la molette des modes.'],
+      ['1', 'Molette des modes', 'Dessus, à droite. Icônes : tête de profil = Portrait, montagnes = Paysage, personnage qui court = Sports, éclair barré = Flash annulé, CA = Créatif auto, et Tv.'],
+      ['2', 'Interrupteur ON / OFF', 'Dessus, à droite, à côté de la molette des modes.'],
       ['3', 'Déclencheur', 'Dessus, à droite, sous ton index. À moitié = mise au point, à fond = photo.'],
-      ['4', 'Molette principale', 'Dessus, juste derrière le déclencheur. Elle change la valeur que tu règles.'],
-      ['5', 'Bouton ISO', 'Dessus, juste derrière la molette principale.'],
-      ['6', 'Croix + SET', 'Au dos, à droite. SET au centre valide. La flèche gauche (DRIVE) sert au retardateur.'],
-      ['7', 'Bouton lecture ▶', 'Au dos, à droite, sous la croix. Pour revoir tes photos.'],
-      ['8', 'Viseur', 'Au dos, en haut au centre. Les réglages s\'affichent en bas du viseur.']
+      ['4', 'Molette principale', 'Dessus, juste derrière le déclencheur. Elle change la valeur affichée.'],
+      ['5', 'Boutons ISO et DISP.', 'Dessus, derrière la molette principale. DISP. allume ou éteint l\'écran des réglages.'],
+      ['6', 'Bouton Q', 'Au dos, près de la croix. Ouvre l\'écran de réglage rapide (utilisé en mode CA).'],
+      ['7', 'Croix + SET', 'Au dos, à droite. SET au centre valide. La flèche gauche règle le retardateur.'],
+      ['8', 'Bouton lecture ▶', 'Au dos, en bas à droite. Pour revoir tes photos.']
     ];
     var html = '<div class="intro"><h2>Les boutons du 600D</h2><p>Les repères utilisés dans les étapes.</p></div>' +
       schemaAppareil() + '<ul class="liste-aide">';
     reperes.forEach(function (r) {
       html += '<li><strong>' + r[0] + '. ' + esc(r[1]) + '</strong><span>' + esc(r[2]) + '</span></li>';
     });
-    html += '<li><strong>Sur l\'objectif (côté gauche)</strong><span>Interrupteur AF/MF : toujours sur AF. Interrupteur STABILIZER : ON à la main, OFF sur trépied. La large bague en caoutchouc règle le zoom (17 à 85).</span></li></ul>' +
-      '<section class="section"><h2 class="section-titre">Lire les chiffres de l\'appareil</h2>' +
-      '<table class="table-lecture"><thead><tr><th>L\'app dit</th><th>L\'appareil affiche</th></tr></thead><tbody>' +
-      '<tr><td>1/250 s</td><td><span class="kbd">250</span></td></tr>' +
-      '<tr><td>1/30 s</td><td><span class="kbd">30</span></td></tr>' +
-      '<tr><td>4 s</td><td><span class="kbd">4"</span></td></tr>' +
-      '<tr><td>f/5.6</td><td><span class="kbd">F5.6</span> (écran) ou <span class="kbd">5.6</span> (viseur)</td></tr>' +
+    html += '<li><strong>Sur l\'objectif (côté gauche)</strong><span>Interrupteur AF/MF : toujours sur AF. Interrupteur STABILIZER : sur ON. La large bague en caoutchouc règle le zoom (17 à 85).</span></li></ul>' +
+      '<section class="section"><h2 class="section-titre">Lire le bas du viseur</h2>' +
+      '<table class="table-lecture"><thead><tr><th>Position</th><th>Ce que c\'est</th></tr></thead><tbody>' +
+      '<tr><td>1er nombre à gauche</td><td>La <b>vitesse</b>. <span class="kbd">250</span> = 1/250 s, <span class="kbd">30</span> = 1/30 s, <span class="kbd">4"</span> = 4 secondes. S\'il clignote : risque de flou.</td></tr>' +
+      '<tr><td>2e nombre</td><td>L\'<b>ouverture</b> (ex. <span class="kbd">5.6</span>).</td></tr>' +
+      '<tr><td>Chiffre tout à droite</td><td>Le nombre de photos en <b>rafale</b> (ex. <span class="kbd">9</span>). Pas un réglage : ignore-le.</td></tr>' +
+      '<tr><td>Point vert rond à droite</td><td>La mise au point est faite : c\'est net.</td></tr>' +
       '</tbody></table></section>';
     cadre({ titre: 'Repérer les boutons', retour: '#/aide', onglet: 'aide', html: html });
   }
@@ -558,7 +538,7 @@
       '<rect class="corps" x="30" y="72" width="280" height="90" rx="18"/>' +
       '<rect class="piece" x="148" y="100" width="44" height="34" rx="6"/><text x="170" y="122" text-anchor="middle">flash</text>' +
       // Toutes les commandes du dessus sont à droite (côté poignée)
-      '<circle class="piece" cx="232" cy="130" r="22"/><text x="232" y="135" text-anchor="middle">Av Tv</text>' +
+      '<circle class="piece" cx="232" cy="130" r="22"/><text x="232" y="135" text-anchor="middle">modes</text>' +
       '<path class="piece" d="M206 114 q-12 16 0 32" fill="none"/>' +
       '<circle class="piece" cx="284" cy="88" r="10"/>' +
       '<rect class="piece" x="268" y="103" width="32" height="11" rx="5"/>' +
@@ -576,8 +556,8 @@
       '<li><strong>Ouverture (f/…)</strong><span>La taille du trou qui laisse entrer la lumière. <b>Petit chiffre</b> (f/4, f/5.6) = beaucoup de lumière et <b>fond flou</b>. <b>Grand chiffre</b> (f/11, f/22) = moins de lumière et <b>tout est net</b>.</span></li>' +
       '<li><strong>Vitesse (1/… s)</strong><span>Le temps pendant lequel la photo se prend. <b>Rapide</b> (1/1000 s) = le mouvement est <b>figé</b>. <b>Lente</b> (1/15 s, 4 s) = le mouvement devient <b>flou</b>, et il faut un trépied.</span></li>' +
       '<li><strong>ISO</strong><span>La sensibilité à la lumière. <b>100</b> = photo la plus propre, pour le plein jour. <b>3200 ou 6400</b> = pour le soir, mais la photo a du « grain ».</span></li>' +
-      '<li><strong>Mode Av</strong><span>Tu choisis l\'ouverture, l\'appareil calcule la vitesse. Pour le flou d\'arrière-plan, les portraits, les paysages.</span></li>' +
-      '<li><strong>Mode Tv</strong><span>Tu choisis la vitesse, l\'appareil calcule l\'ouverture. Pour figer ou montrer le mouvement.</span></li>' +
+      '<li><strong>Les modes à icônes</strong><span>Portrait, Paysage, Sports, Flash annulé, CA : l\'appareil règle lui-même ouverture, vitesse et ISO pour obtenir l\'effet. C\'est ce que l\'app utilise le plus souvent.</span></li>' +
+      '<li><strong>Mode Tv</strong><span>Tu choisis la vitesse, l\'appareil calcule le reste. Utilisé pour le panoramique filé et le filé d\'eau, les deux effets qui n\'ont pas d\'icône.</span></li>' +
       '</ul>';
     cadre({ titre: 'Les bases', retour: '#/aide', onglet: 'aide', html: html });
   }
