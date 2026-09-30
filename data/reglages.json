@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "appareil": "Canon EOS 600D",
   "objectif": "Canon EF-S 17-85 mm f/4-5.6 IS USM",
   "styles": [
@@ -10,15 +10,20 @@
       "explication": "La personne ressort nettement, le décor derrière devient flou et doux. L'effet est plus fort quand tu zoomes au maximum, que tu te rapproches du sujet et que le fond est loin derrière lui.",
       "image": "img/styles/bokeh.jpg",
       "credit": {
-        "auteur": "chelsea ferenando",
+        "auteur": "Pete Bellis",
         "licence": "CC0",
-        "source": "https://commons.wikimedia.org/wiki/File:Fashionable_woman_and_bokeh_(Unsplash).jpg"
+        "source": "https://commons.wikimedia.org/wiki/File:Hooded_woman_in_snow_(Unsplash).jpg"
       },
       "sujets": [
         "portrait",
         "groupe"
       ],
-      "modeAppareil": "portrait"
+      "modeAppareil": "portrait",
+      "astuces": [
+        "Plus le fond est loin derrière la personne, plus il est flou (manuel p.59).",
+        "Zoome au maximum (85) et rapproche-toi pour cadrer à partir de la taille.",
+        "Un fond uni et sombre fait encore plus ressortir le visage."
+      ]
     },
     {
       "id": "portrait_net",
@@ -35,7 +40,11 @@
         "portrait",
         "groupe"
       ],
-      "modeAppareil": "ca"
+      "modeAppareil": "ca",
+      "astuces": [
+        "Le réglage « net » s'efface quand tu changes de mode ou éteins l'appareil : refais-le à chaque fois (manuel p.56).",
+        "Si la ligne flou ↔ net est grisée, c'est que le flash est sorti : repousse-le doucement du doigt."
+      ]
     },
     {
       "id": "paysage",
@@ -51,7 +60,11 @@
       "sujets": [
         "paysage"
       ],
-      "modeAppareil": "paysage"
+      "modeAppareil": "paysage",
+      "astuces": [
+        "Le grand-angle (17) donne plus de netteté du premier plan à l'horizon (manuel p.60).",
+        "Dans ce mode, le flash ne sort jamais : de nuit, pose l'appareil sur un trépied."
+      ]
     },
     {
       "id": "panning",
@@ -67,7 +80,11 @@
       "sujets": [
         "action"
       ],
-      "modeAppareil": "Tv"
+      "modeAppareil": "Tv",
+      "astuces": [
+        "Entre 1/30 et 1/250 s, le sujet reste net et le fond file (manuel p.95). Plus c'est lent, plus le fond file, mais plus c'est difficile.",
+        "Fais plusieurs essais : même les pros ratent beaucoup de photos filées."
+      ]
     },
     {
       "id": "sport",
@@ -83,7 +100,32 @@
       "sujets": [
         "action"
       ],
-      "modeAppareil": "sports"
+      "modeAppareil": "sports",
+      "astuces": [
+        "Garde le déclencheur à moitié enfoncé : l'appareil suit le sujet et émet un petit bip continu (manuel p.62).",
+        "Garde le doigt appuyé à fond pour une rafale d'environ 3 photos par seconde, puis garde la meilleure."
+      ]
+    },
+    {
+      "id": "gros_plan",
+      "nom": "Gros-plan",
+      "sousTitre": "Les petits détails, de très près",
+      "explication": "Une fleur, un insecte, un petit objet : le sujet remplit la photo et le fond devient flou.",
+      "image": "img/styles/gros_plan.jpg",
+      "credit": {
+        "auteur": "Demi Kwant",
+        "licence": "CC0",
+        "source": "https://commons.wikimedia.org/wiki/File:Daisy_in_macro_(Unsplash).jpg"
+      },
+      "sujets": [
+        "objet"
+      ],
+      "modeAppareil": "gros_plan",
+      "astuces": [
+        "Approche-toi au maximum : ton objectif fait la mise au point jusqu'à environ 35 cm. Trop près, le point vert clignote : recule un peu (manuel p.61).",
+        "Un fond simple (feuillage, mur uni) fait ressortir le sujet.",
+        "Si le flash sort et que le bas de la photo est sombre, recule : l'objectif fait de l'ombre."
+      ]
     },
     {
       "id": "nuit",
@@ -101,7 +143,11 @@
         "groupe",
         "ville"
       ],
-      "modeAppareil": "flash_annule"
+      "modeAppareil": "flash_annule",
+      "astuces": [
+        "Au grand-angle (17), le risque de flou est plus faible (manuel p.55).",
+        "Demande aux personnes de rester immobiles jusqu'au « clac » de fin."
+      ]
     },
     {
       "id": "eau",
@@ -117,7 +163,34 @@
       "sujets": [
         "paysage"
       ],
-      "modeAppareil": "Tv"
+      "modeAppareil": "Tv",
+      "astuces": [
+        "À partir de 1/30 s ou plus lent, l'eau commence à devenir floue (manuel p.95).",
+        "Plus la lumière baisse, plus tu peux allonger la vitesse et plus l'eau est soyeuse."
+      ]
+    },
+    {
+      "id": "noir_blanc",
+      "nom": "Noir & blanc",
+      "sousTitre": "L'ambiance intemporelle",
+      "explication": "L'appareil enregistre directement la photo en noir et blanc. Les contrastes, les textures et les expressions ressortent davantage.",
+      "image": "img/styles/noir_blanc.jpg",
+      "credit": {
+        "auteur": "Jeremy Bishop",
+        "licence": "CC0",
+        "source": "https://commons.wikimedia.org/wiki/File:Curly_hair_and_freckles_man_(Unsplash).jpg"
+      },
+      "sujets": [
+        "portrait",
+        "paysage"
+      ],
+      "modeAppareil": "portrait",
+      "ambiance": "monochrome",
+      "astuces": [
+        "L'ambiance Monochrome propose aussi « Sépia » (tons bruns anciens) et « Bleu » (manuel p.66).",
+        "Le réglage s'efface quand tu changes de mode ou éteins l'appareil : refais-le à chaque fois.",
+        "Astuce : appuie sur le bouton Visée par l'écran (au dos en haut, marqué d'un petit appareil photo, à droite de la molette du viseur) pour voir l'effet noir et blanc en direct sur l'écran."
+      ]
     }
   ],
   "situations": [
@@ -188,6 +261,12 @@
       "nom": "Ville & illuminations",
       "icone": "🏙️",
       "aide": "Rues, monuments, décorations lumineuses"
+    },
+    {
+      "id": "objet",
+      "nom": "Une fleur ou un petit objet",
+      "icone": "🌼",
+      "aide": "Fleur, insecte, bijou, plat… photographié de près"
     }
   ],
   "modes": [
@@ -226,6 +305,18 @@
       "nom": "Tv",
       "repere": "les lettres Tv",
       "role": "Tu choisis la vitesse, l'appareil règle le reste."
+    },
+    {
+      "id": "gros_plan",
+      "nom": "Gros-plan",
+      "repere": "l'icône fleur",
+      "role": "Pour les petits sujets de près (fleur, objet). Le flash peut sortir tout seul s'il fait sombre."
+    },
+    {
+      "id": "auto",
+      "nom": "Scène intelligente auto",
+      "repere": "l'icône A+ (petit cadre avec un A et un +)",
+      "role": "Tout automatique : l'appareil analyse la scène et règle tout."
     }
   ],
   "regles": [
@@ -294,6 +385,24 @@
     {"style": "eau", "sujet": "paysage", "situation": "ombre", "vitesse": "1/8", "iso": "AUTO", "focale": 24, "trepied": true, "retardateur": true, "conseil": "Bon effet sur une cascade ou un torrent rapide. Plus la lumière baisse (fin de journée), plus tu peux mettre une vitesse lente et plus l'eau sera soyeuse."},
     {"style": "eau", "sujet": "paysage", "situation": "interieur_lumineux", "indisponible": true, "raison": "L'effet filé d'eau se fait dehors, sur de l'eau qui coule (cascade, rivière, vagues).", "alternative": null, "alternativeTexte": "Choisis une situation d'extérieur : ciel voilé, à l'ombre ou nuit dehors."},
     {"style": "eau", "sujet": "paysage", "situation": "interieur_sombre", "indisponible": true, "raison": "L'effet filé d'eau se fait dehors, sur de l'eau qui coule (cascade, rivière, vagues).", "alternative": null, "alternativeTexte": "Choisis une situation d'extérieur : ciel voilé, à l'ombre ou nuit dehors."},
-    {"style": "eau", "sujet": "paysage", "situation": "nuit", "vitesse": "8", "iso": "AUTO", "focale": 24, "trepied": true, "retardateur": true, "conseil": "Magnifique sur une fontaine éclairée ou un port la nuit. La photo dure 8 secondes : ne touche à rien avant la fin (le deuxième clic)."}
+    {"style": "eau", "sujet": "paysage", "situation": "nuit", "vitesse": "8", "iso": "AUTO", "focale": 24, "trepied": true, "retardateur": true, "conseil": "Magnifique sur une fontaine éclairée ou un port la nuit. La photo dure 8 secondes : ne touche à rien avant la fin (le deuxième clic)."},
+    {"style": "gros_plan", "sujet": "objet", "situation": "plein_soleil", "focale": 85, "conseil": "Tourne autour du sujet pour que le soleil l'éclaire de côté ou par derrière : les pétales deviennent lumineux."},
+    {"style": "gros_plan", "sujet": "objet", "situation": "ciel_voile", "focale": 85, "conseil": "Lumière idéale pour les fleurs : couleurs douces, sans ombre dure."},
+    {"style": "gros_plan", "sujet": "objet", "situation": "ombre", "focale": 85, "conseil": "À l'ombre, tiens l'appareil à deux mains, coudes serrés : de près, le moindre mouvement se voit."},
+    {"style": "gros_plan", "sujet": "objet", "situation": "interieur_lumineux", "focale": 85, "conseil": "Pose l'objet près d'une fenêtre, devant un fond uni (nappe, mur, carton)."},
+    {"style": "gros_plan", "sujet": "objet", "situation": "interieur_sombre", "focale": 85, "conseil": "Rapproche l'objet d'une lampe. S'il fait trop sombre, le flash sort tout seul : c'est normal. Reste entre 1 et 5 m (portée du flash). Si le bas de la photo est sombre, recule un peu."},
+    {"style": "gros_plan", "sujet": "objet", "situation": "nuit", "focale": 85, "conseil": "Le flash va sortir : le sujet sera éclairé et le fond deviendra noir. Si le bas de la photo est sombre, recule un peu."},
+    {"style": "noir_blanc", "sujet": "portrait", "situation": "plein_soleil", "focale": 50, "conseil": "Le noir et blanc aime les contrastes : une lumière de côté sculpte le visage."},
+    {"style": "noir_blanc", "sujet": "portrait", "situation": "ciel_voile", "focale": 50, "conseil": "Lumière douce : cherche un fond sombre pour que le visage ressorte."},
+    {"style": "noir_blanc", "sujet": "portrait", "situation": "ombre", "focale": 50, "conseil": "Place la personne au bord de l'ombre, le visage tourné vers la lumière."},
+    {"style": "noir_blanc", "sujet": "portrait", "situation": "interieur_lumineux", "focale": 50, "conseil": "Une fenêtre sur le côté de la personne : effet très réussi en noir et blanc."},
+    {"style": "noir_blanc", "sujet": "portrait", "situation": "interieur_sombre", "focale": 50, "conseil": "Rapproche la personne d'une lampe. S'il fait trop sombre, le flash sort tout seul : c'est normal. Reste entre 1 et 5 m (portée du flash)."},
+    {"style": "noir_blanc", "sujet": "portrait", "situation": "nuit", "focale": 50, "conseil": "Le flash va sortir : visage éclairé, fond noir. En noir et blanc, cela donne un effet « studio ». Reste à moins de 5 m."},
+    {"style": "noir_blanc", "sujet": "paysage", "situation": "plein_soleil", "mode": "paysage", "focale": 17, "conseil": "Cherche les formes et les contrastes : nuages, ombres, lignes."},
+    {"style": "noir_blanc", "sujet": "paysage", "situation": "ciel_voile", "mode": "paysage", "focale": 17, "conseil": "Un ciel gris devient tout blanc en noir et blanc : cadre avec peu de ciel."},
+    {"style": "noir_blanc", "sujet": "paysage", "situation": "ombre", "mode": "paysage", "focale": 17, "conseil": "Les textures (écorce, pierre, eau) ressortent très bien en noir et blanc."},
+    {"style": "noir_blanc", "sujet": "paysage", "situation": "interieur_lumineux", "indisponible": true, "raison": "Un paysage se photographie dehors.", "alternative": "noir_blanc", "alternativeSujet": "portrait", "alternativeTexte": "Pour une personne à l'intérieur, choisis le sujet « Une personne »."},
+    {"style": "noir_blanc", "sujet": "paysage", "situation": "interieur_sombre", "indisponible": true, "raison": "Un paysage se photographie dehors.", "alternative": "noir_blanc", "alternativeSujet": "portrait", "alternativeTexte": "Pour une personne à l'intérieur, choisis le sujet « Une personne »."},
+    {"style": "noir_blanc", "sujet": "paysage", "situation": "nuit", "mode": "paysage", "focale": 17, "trepied": true, "retardateur": true, "conseil": "Ville la nuit en noir et blanc : lumières et ombres très graphiques. La photo peut durer plusieurs secondes : ne touche à rien avant le « clac » de fin."}
   ]
 }

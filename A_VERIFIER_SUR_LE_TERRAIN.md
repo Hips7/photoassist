@@ -10,7 +10,9 @@ Restent quelques positions que le manuel montre en dessin mais pas en texte.
 | 1 | ~~DISP. à côté d'ISO~~ ✅ confirmé le 2026-09-30 | |
 | 2 | Bouton **Q** : au dos, collé au bord droit de l'écran, sous le bouton Av (d'après le dessin du manuel p.19) | Portrait net (mode CA) |
 | 3 | En mode **CA**, la ligne « flou ↔ net » se règle bien avec la molette principale | Portrait net |
-| 4 | Le schéma « Repérer les boutons » correspond à l'appareil | Aide → Repérer les boutons |
+| 4 | Les schémas « dessus » et « dos » correspondent à l'appareil | Aide → Repérer les boutons |
+| 5 | Noir & blanc : après Q, la ligne « Réglage standard » permet bien de choisir « Monochrome » | Style Noir & blanc |
+| 6 | La petite molette à droite du viseur rend bien le viseur net | Préparer l'appareil |
 
 ## Sur les réglages (au fil des sorties photo)
 

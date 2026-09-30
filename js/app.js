@@ -129,6 +129,10 @@
     }
     html += '<div class="intro"><h2>Quel effet veux-tu&nbsp;?</h2>' +
       '<p>Touche une photo : je te donne les réglages et je te guide bouton par bouton sur ton Canon.</p></div>';
+    html += '<div class="raccourcis">' +
+      '<a class="raccourci express" href="#/express"><span class="ico" aria-hidden="true">⚡</span><strong>Photo express</strong><small>Pas le temps ? 6 gestes</small></a>' +
+      '<a class="raccourci" href="#/preparer"><span class="ico" aria-hidden="true">🎒</span><strong>Préparer l\'appareil</strong><small>Avant une sortie</small></a>' +
+      '</div>';
     html += '<div class="galerie">';
     DONNEES.styles.forEach(function (s, i) {
       html += '<a class="carte-style' + (i === DONNEES.styles.length - 1 && DONNEES.styles.length % 2 ? ' large' : '') + '" href="#/style/' + s.id + '">' +
@@ -230,55 +234,124 @@
 
   // ---------- Écran 3 : Résultat ----------
 
-  // Mode de la molette pour un style (Portrait, Paysage, Sports, Flash annulé, CA ou Tv)
-  function modeDe(styleId) {
-    var id = style(styleId).modeAppareil;
+  // Mode de la molette : celui de la règle s'il est précisé, sinon celui du style
+  function modeDe(styleId, r) {
+    var id = (r && r.mode) || style(styleId).modeAppareil;
     return DONNEES.modes.filter(function (m) { return m.id === id; })[0];
   }
+
+  // Dépannages réutilisés (source : mode d'emploi Canon 600D, guide de dépannage p.278-287)
+  var AIDE = {
+    allumage: [
+      ['Rien ne s\'allume', 'Batterie déchargée ou mal enfoncée. Vérifie aussi que les couvercles de la batterie (dessous) et de la carte (côté droit) sont bien fermés.'],
+      ['L\'appareil est allumé mais l\'écran est noir', 'Appuie sur DISP. (dessus, à côté d\'ISO). L\'écran s\'éteint aussi tout seul quand tu regardes dans le viseur : c\'est normal.'],
+      ['Il s\'éteint tout seul', 'C\'est la mise en veille automatique. Appuie à moitié sur le déclencheur pour le réveiller.']
+    ],
+    molette: [
+      ['Je ne trouve pas l\'icône', 'Regarde le schéma dans Aide → Repérer les boutons. La molette tourne dans les deux sens, sans butée.'],
+      ['L\'écran n\'affiche pas le bon mode', 'L\'icône doit être pile en face du petit trait blanc, pas entre deux.']
+    ],
+    boutonQ: [
+      ['Je ne trouve pas le bouton Q', 'Il est petit, collé au bord droit de l\'écran, juste sous le bouton Av. Il porte un « Q » et une petite imprimante.'],
+      ['Rien ne se passe en appuyant sur Q', 'Appuie d\'abord à moitié sur le déclencheur pour réveiller l\'appareil, puis sur Q. L\'écran doit afficher les réglages (sinon, DISP.).']
+    ],
+    vitesseTv: [
+      ['La molette ne change pas la vitesse', 'Vérifie que la molette des modes est bien sur Tv. Si un menu est ouvert, appuie à moitié sur le déclencheur pour le fermer.'],
+      ['Je ne sais pas si l\'ISO est sur AUTO', 'Appuie sur le bouton ISO (dessus) : la liste s\'affiche. Choisis AUTO avec la molette, puis SET.']
+    ],
+    zoom: [
+      ['Je ne vois pas les chiffres', 'Ils sont gravés sur la large bague en caoutchouc. Le repère est un petit trait sur la partie fixe de l\'objectif, juste derrière la bague.']
+    ],
+    retardateur: [
+      ['Il n\'y a pas d\'horloge « 2 »', 'Dans les modes à icônes, seul le retardateur 10 secondes existe (manuel p.64). Prends l\'horloge « 10 ».'],
+      ['La photo ne se prend pas', 'Avec le retardateur, la photo part 2 ou 10 secondes après : la petite lampe à l\'avant clignote pendant l\'attente.']
+    ],
+    miseAuPoint: [
+      ['Pas de bip, rien ne bouge', 'Le petit interrupteur sur le côté de l\'objectif est sur MF : mets-le sur AF. (Le bip peut aussi avoir été coupé dans le menu.)'],
+      ['Le point vert clignote', 'L\'appareil n\'arrive pas à faire le net : sujet trop proche (moins de 35 cm), trop sombre ou tout uni (mur, ciel). Vise un endroit contrasté à la même distance, garde à moitié, puis recadre.'],
+      ['Le net se fait sur le mauvais endroit', 'Place le sujet au centre du viseur, appuie à moitié, garde le doigt, recadre, puis appuie à fond (verrouillage de la mise au point, manuel p.53).']
+    ],
+    clignoteVitesse: [
+      ['Le chiffre clignote tout le temps', 'Il manque de lumière. Appuie-toi (mur, table), rapproche-toi d\'une lumière, ou utilise un trépied.'],
+      ['Je vois un « 9 » à droite', 'C\'est le nombre de photos possibles en rafale, pas un réglage : ignore-le.']
+    ],
+    clignoteOuverture: [
+      ['Ça clignote même en tournant la molette', 'La lumière est trop forte ou trop faible pour cet effet. Change de situation ou choisis un autre style.']
+    ],
+    declenchement: [
+      ['Le déclencheur ne déclenche pas', 'Le point vert clignote : la mise au point n\'est pas faite (voir l\'étape précédente). Ou bien un message s\'affiche dans le viseur (voir ci-dessous).'],
+      ['« Card » dans le viseur', 'Pas de carte mémoire, ou mal insérée. Vérifie aussi le petit taquet sur le côté de la carte : il ne doit pas être sur LOCK.'],
+      ['« FuLL » dans le viseur', 'Carte pleine : efface des photos ou change de carte.'],
+      ['« buSY » dans le viseur', 'L\'appareil enregistre ou le flash se recharge : attends une seconde.']
+    ],
+    resultat: [
+      ['La photo est floue', 'Objectif sur AF ? STABILIZER sur ON ? Appuie doucement sur le déclencheur, sans à-coup. Si la vitesse clignotait, il manquait de lumière.'],
+      ['Des zones clignotent en noir sur l\'écran', 'C\'est l\'alerte « trop clair » : ces zones sont brûlées. Ce n\'est pas un défaut de la photo, juste un avertissement.'],
+      ['La photo est trop sombre ou trop claire', 'Appuie sur Q, puis ▲▼ jusqu\'à la ligne « Réglage standard » et choisis l\'ambiance « Plus clair » ou « Plus sombre » avec la molette (manuel p.65).']
+    ],
+    ambiance: [
+      ['Je ne trouve pas « Réglage standard »', 'Après Q, monte ou descends avec les flèches ▲▼ de la croix : le nom de la ligne choisie s\'affiche en bas de l\'écran.'],
+      ['L\'effet a disparu', 'L\'ambiance s\'efface quand tu changes de mode ou éteins l\'appareil : refais ce réglage.']
+    ]
+  };
 
   // Étapes basées sur le mode d'emploi Canon 600D : on utilise les modes intégrés
   // de la molette et l'ISO AUTO, l'appareil règle lui-même ce qu'il sait régler.
   function etapesPour(r) {
     var e = [];
-    var m = modeDe(r.style);
+    var s = style(r.style);
+    var m = modeDe(r.style, r);
     var tv = m.id === 'Tv';
 
     e.push({
       titre: 'Allume l\'appareil',
       ou: 'Interrupteur <b>sur le dessus, à droite</b>, à côté de la grande molette des modes : mets-le sur <span class="kbd">ON</span>.',
-      voir: 'L\'écran au dos affiche les réglages. S\'il reste noir, appuie sur le bouton <span class="kbd">DISP.</span> (sur le dessus, à côté du bouton ISO).'
+      voir: 'L\'écran au dos affiche les réglages. S\'il reste noir, appuie sur <span class="kbd">DISP.</span> (sur le dessus, à côté du bouton ISO).',
+      aide: AIDE.allumage
     });
     e.push({
       titre: 'Molette des modes sur « ' + m.nom + ' »',
       ou: 'Tourne la <b>grande molette sur le dessus, à droite</b> jusqu\'à ' + esc(m.repere) + ', face au trait blanc.',
-      voir: esc(m.role)
+      voir: esc(m.role),
+      aide: AIDE.molette
     });
     if (m.id === 'ca') {
       e.push({
         titre: 'Choisis « arrière-plan net »',
-        ou: 'Appuie sur le bouton <span class="kbd">Q</span> : au dos, collé au bord droit de l\'écran, juste sous le bouton Av (il porte un « Q » et une petite imprimante). Avec les flèches de la croix, va sur la ligne <b>flou ↔ net</b>. Tourne la <b>molette principale</b> (derrière le déclencheur) <b>vers la droite</b>, jusqu\'au bout.',
-        voir: 'Le curseur est côté « net ». Appuie à moitié sur le déclencheur pour revenir.'
+        ou: 'Appuie sur <span class="kbd">Q</span> : au dos, collé au bord droit de l\'écran, sous le bouton Av. Avec les flèches de la croix, va sur la ligne <b>flou ↔ net</b>, puis tourne la <b>molette principale vers la droite</b>, jusqu\'au bout.',
+        voir: 'Le curseur est côté « net ». Appuie à moitié sur le déclencheur pour revenir.',
+        aide: AIDE.boutonQ.concat([['La ligne flou ↔ net est grisée', 'Le flash est sorti : repousse-le doucement du doigt (manuel p.57).']])
+      });
+    }
+    if (s.ambiance === 'monochrome') {
+      e.push({
+        titre: 'Choisis l\'ambiance « Monochrome »',
+        ou: 'Appuie sur <span class="kbd">Q</span> (bord droit de l\'écran, sous Av). Avec les flèches <b>▲▼</b>, va sur la ligne <b>« Réglage standard »</b>. Tourne la molette principale jusqu\'à <b>« Monochrome »</b>. Puis flèche <b>▼</b> : choisis <b>« N&B »</b> avec la molette.',
+        voir: '« Monochrome » s\'affiche à l\'écran. Il s\'efface si tu changes de mode ou éteins l\'appareil.',
+        aide: AIDE.boutonQ.concat(AIDE.ambiance)
       });
     }
     if (tv) {
       e.push({
         titre: 'Règle la vitesse sur ' + vitesseTexte(r.vitesse),
         ou: 'Tourne la <b>molette principale</b> : la petite molette crantée <b>juste derrière le déclencheur</b>, sous ton index.',
-        voir: 'L\'écran affiche <span class="kbd">' + esc(vitesseBoitier(r.vitesse)) + '</span>' + (r.vitesse.indexOf('/') > -1 ? ' (l\'appareil n\'écrit pas le « 1/ »).' : ' (le signe " veut dire secondes).') +
-          ' L\'ISO doit être sur <b>AUTO</b> : sinon, bouton <span class="kbd">ISO</span> sur le dessus → AUTO → <span class="kbd">SET</span>.'
+        voir: 'L\'écran affiche <span class="kbd">' + esc(vitesseBoitier(r.vitesse)) + '</span>' + (r.vitesse.indexOf('/') > -1 ? ' (l\'appareil n\'écrit pas le « 1/ »).' : ' (le signe " veut dire secondes).') + ' L\'ISO doit être sur <b>AUTO</b> (voir « Préparer l\'appareil »).',
+        aide: AIDE.vitesseTv
       });
     }
     e.push({
       titre: 'Zoom sur ' + r.focale + ' mm',
       ou: 'Tourne la <b>large bague en caoutchouc</b> de l\'objectif jusqu\'à ce que <b>' + r.focale + '</b> soit face au petit trait blanc.',
-      voir: r.focale === 85 ? '85 = zoom au maximum (bague tournée jusqu\'au bout).' : r.focale === 17 ? '17 = le plus large (bague tournée jusqu\'au bout dans l\'autre sens).' : 'Pas besoin d\'être au millimètre près.'
+      voir: r.focale === 85 ? '85 = zoom au maximum (bague tournée jusqu\'au bout).' : r.focale === 17 ? '17 = le plus large (bague tournée jusqu\'au bout dans l\'autre sens).' : 'Pas besoin d\'être au millimètre près.',
+      aide: AIDE.zoom
     });
     if (r.trepied) {
-      var dixSec = !tv; // en mode automatique, seul le retardateur 10 s est disponible (manuel p.64)
+      var dixSec = !tv; // en mode à icône, seul le retardateur 10 s est disponible (manuel p.64)
       e.push({
         titre: 'Trépied + retardateur ' + (dixSec ? '10' : '2') + ' secondes',
-        ou: 'Pose l\'appareil sur le trépied. Puis au dos, appuie sur la <b>flèche gauche de la croix</b> (mode d\'acquisition) et choisis l\'<b>horloge « ' + (dixSec ? '10' : '2') + ' »</b>, puis <span class="kbd">SET</span>.',
-        voir: 'L\'icône horloge s\'affiche à l\'écran : ton doigt ne fera pas bouger l\'appareil. Pense à revenir sur le rectangle simple après.'
+        ou: 'Pose l\'appareil sur le trépied. Au dos, appuie sur la <b>flèche gauche de la croix</b> (mode d\'acquisition) et choisis l\'<b>horloge « ' + (dixSec ? '10' : '2') + ' »</b>, puis <span class="kbd">SET</span>.',
+        voir: 'L\'icône horloge s\'affiche à l\'écran : ton doigt ne fera pas bouger l\'appareil. Pense à revenir sur le rectangle simple après.',
+        aide: AIDE.retardateur
       });
     }
     e.push({
@@ -290,19 +363,22 @@
           : 'Place le sujet dans le viseur et appuie <b>à moitié</b> sur le déclencheur, sans aller au bout.' + (m.id === 'portrait' ? ' Vise le <b>visage</b>.' : ''),
       voir: m.id === 'sports' || r.style === 'panning'
         ? 'Un petit bip continu : l\'appareil suit le sujet. C\'est normal que le point vert ne reste pas allumé.'
-        : 'Un « bip » et le <b>point vert</b> s\'allume à droite, en bas du viseur : c\'est net.'
+        : 'Un « bip » et le <b>point vert</b> s\'allume à droite, en bas du viseur : c\'est net.',
+      aide: AIDE.miseAuPoint
     });
     if (tv) {
       e.push({
         titre: 'Regarde si l\'ouverture clignote',
         ou: 'En bas du viseur, le <b>2e nombre</b> est l\'ouverture choisie par l\'appareil (le 1er, à gauche, est ta vitesse).',
-        voir: 'Fixe : tout va bien. Clignote sur un <b>petit nombre</b> (4 ou 5.6) : trop sombre → tourne la molette principale <b>vers la gauche</b> (plus lent). Clignote sur <b>22</b> : trop clair → molette <b>vers la droite</b> (plus rapide).'
+        voir: 'Fixe : tout va bien. Clignote sur un <b>petit nombre</b> (4 ou 5.6) : trop sombre → tourne la molette principale <b>vers la gauche</b> (plus lent). Clignote sur <b>22</b> : trop clair → molette <b>vers la droite</b> (plus rapide).',
+        aide: AIDE.clignoteOuverture
       });
     } else if (!r.trepied) {
       e.push({
         titre: 'Regarde si la vitesse clignote',
         ou: 'Toujours à moitié enfoncé, regarde le <b>1er nombre en bas à gauche du viseur</b> : c\'est la vitesse choisie par l\'appareil.',
-        voir: 'Fixe : tout va bien. S\'il <b>clignote</b>, l\'appareil te prévient d\'un risque de flou : appuie-toi contre un mur ou une table et tiens-toi bien immobile' + (r.focale > 17 ? ', ou dézoome vers 17' : '') + '. Le chiffre isolé tout à droite (ex. 9) n\'est pas la vitesse : c\'est le nombre de photos en rafale, ignore-le.'
+        voir: 'Fixe : tout va bien. S\'il <b>clignote</b>, l\'appareil te prévient d\'un risque de flou : appuie-toi contre un mur ou une table et reste bien immobile' + (r.focale > 17 ? ', ou dézoome vers 17' : '') + '.',
+        aide: AIDE.clignoteVitesse
       });
     }
     e.push({
@@ -314,14 +390,23 @@
           : r.style === 'panning'
             ? 'Appuie <b>à fond</b> sans arrêter de suivre le sujet, et continue à le suivre après le déclic.'
             : 'Appuie <b>doucement à fond</b> sur le déclencheur, sans donner de coup.',
-      voir: r.trepied ? 'Ne touche à rien avant le « clac » de fin de photo.' : 'Un « clac » : la photo est prise et s\'affiche 2 secondes à l\'écran.'
+      voir: r.trepied ? 'Ne touche à rien avant le « clac » de fin de photo.' : 'Un « clac » : la photo est prise et s\'affiche 2 secondes à l\'écran.',
+      aide: AIDE.declenchement
     });
     e.push({
       titre: 'Regarde le résultat',
-      ou: 'Bouton lecture <span class="kbd">▶</span> : au dos, collé au bord droit de l\'écran, en bas (sous la croix, côté écran). Pour zoomer dans la photo : bouton loupe, au dos en haut à droite.',
-      voir: 'Floue ? Relis le conseil ci-dessous. Pour revenir à la prise de vue, appuie à moitié sur le déclencheur.'
+      ou: 'Bouton lecture <span class="kbd">▶</span> : au dos, collé au bord droit de l\'écran, en bas. Pour zoomer dans la photo : bouton loupe, au dos en haut à droite.',
+      voir: 'Pour revenir à la prise de vue, appuie à moitié sur le déclencheur.',
+      aide: AIDE.resultat
     });
     return e;
+  }
+
+  // Bulle « ça ne marche pas ? » : liste symptôme → solution
+  function bulleAide(aide) {
+    if (!aide || !aide.length) return '';
+    return '<details class="aide-etape"><summary><span aria-hidden="true">?</span> Ça ne marche pas ?</summary><ul>' +
+      aide.map(function (a) { return '<li><b>' + esc(a[0]) + '</b>' + esc(a[1]) + '</li>'; }).join('') + '</ul></details>';
   }
 
   function vueResultat(styleId, sujetId, situId) {
@@ -354,7 +439,7 @@
     }
 
     var r = trouve.regle;
-    var m = modeDe(styleId);
+    var m = modeDe(styleId, r);
     var tv = m.id === 'Tv';
     var cleRes = styleId + '+' + sujetId + '+' + situId;
     var cochees = etapesCochees[cleRes] || (etapesCochees[cleRes] = {});
@@ -376,17 +461,13 @@
       html += '<p class="encart materiel"><strong>🔧 Trépied obligatoire</strong>La photo dure longtemps : à la main, elle serait floue.</p>';
     }
 
-    html += '<section class="section"><h2 class="section-titre">Pas à pas sur ton Canon</h2>' +
-      '<div class="progression"><div class="jauge"><i id="jauge"></i></div><span id="compteur"></span><button type="button" id="btn-raz">Tout décocher</button></div>' +
-      '<ol class="etapes">';
-    etapes.forEach(function (et, i) {
-      html += '<li class="etape' + (cochees[i] ? ' faite' : '') + '" data-i="' + i + '">' +
-        '<button type="button" class="coche" aria-pressed="' + !!cochees[i] + '" aria-label="Étape ' + (i + 1) + ' faite">' + (cochees[i] ? '✓' : i + 1) + '</button>' +
-        '<div class="etape-corps"><h3>' + esc(et.titre) + '</h3><p class="ou">' + et.ou + '</p><p class="voir">' + et.voir + '</p></div></li>';
-    });
-    html += '</ol></section>';
+    html += htmlEtapes('Pas à pas sur ton Canon', etapes, cochees);
 
     html += '<p class="encart conseil"><strong>💡 Conseil</strong>' + esc(r.conseil) + '</p>';
+    if (s.astuces && s.astuces.length) {
+      html += '<div class="encart info"><strong>📘 Astuces du mode d\'emploi</strong><ul class="astuces">' +
+        s.astuces.map(function (a) { return '<li>' + esc(a) + '</li>'; }).join('') + '</ul></div>';
+    }
 
     var fav = estFavori(styleId, sujetId, situId);
     html += '<div class="section"><button type="button" class="bouton ' + (fav ? 'secondaire' : '') + '" id="btn-fav">' + (fav ? '★ Dans mes favoris' : '☆ Enregistrer dans mes favoris') + '</button>' +
@@ -394,6 +475,29 @@
 
     cadre({ titre: 'Réglages', retour: '#/style/' + styleId, onglet: 'styles', nuit: nuit, html: html });
 
+    brancherEtapes(etapes, cochees, function () { vueResultat(styleId, sujetId, situId); });
+    document.getElementById('btn-fav').onclick = function () {
+      var ajoute = basculerFavori(styleId, sujetId, situId);
+      this.className = 'bouton ' + (ajoute ? 'secondaire' : '');
+      this.textContent = ajoute ? '★ Dans mes favoris' : '☆ Enregistrer dans mes favoris';
+      toast(ajoute ? 'Ajouté à tes favoris' : 'Retiré de tes favoris');
+    };
+  }
+
+  // Liste d'étapes à cocher (résultat, express, préparation)
+  function htmlEtapes(titre, etapes, cochees) {
+    var html = '<section class="section"><h2 class="section-titre">' + esc(titre) + '</h2>' +
+      '<div class="progression"><div class="jauge"><i id="jauge"></i></div><span id="compteur"></span><button type="button" id="btn-raz">Tout décocher</button></div>' +
+      '<ol class="etapes">';
+    etapes.forEach(function (et, i) {
+      html += '<li class="etape' + (cochees[i] ? ' faite' : '') + '" data-i="' + i + '">' +
+        '<button type="button" class="coche" aria-pressed="' + !!cochees[i] + '" aria-label="Étape ' + (i + 1) + ' faite">' + (cochees[i] ? '✓' : i + 1) + '</button>' +
+        '<div class="etape-corps"><h3>' + esc(et.titre) + '</h3><p class="ou">' + et.ou + '</p>' + (et.voir ? '<p class="voir">' + et.voir + '</p>' : '') + bulleAide(et.aide) + '</div></li>';
+    });
+    return html + '</ol></section>';
+  }
+
+  function brancherEtapes(etapes, cochees, reafficher) {
     function majProgression() {
       var n = Object.keys(cochees).filter(function (k) { return cochees[k]; }).length;
       document.getElementById('jauge').style.width = (100 * n / etapes.length) + '%';
@@ -412,13 +516,7 @@
     });
     document.getElementById('btn-raz').onclick = function () {
       Object.keys(cochees).forEach(function (k) { delete cochees[k]; });
-      vueResultat(styleId, sujetId, situId);
-    };
-    document.getElementById('btn-fav').onclick = function () {
-      var ajoute = basculerFavori(styleId, sujetId, situId);
-      this.className = 'bouton ' + (ajoute ? 'secondaire' : '');
-      this.textContent = ajoute ? '★ Dans mes favoris' : '☆ Enregistrer dans mes favoris';
-      toast(ajoute ? 'Ajouté à tes favoris' : 'Retiré de tes favoris');
+      reafficher();
     };
     majProgression();
   }
@@ -486,6 +584,8 @@
   function vueAide() {
     var html = '<div class="intro"><h2>Aide</h2><p>Tout ce qu\'il faut savoir pour bien démarrer.</p></div>' +
       '<a class="lien-carte" href="#/boutons"><span class="ico" aria-hidden="true">📷</span>Repérer les boutons de l\'appareil</a>' +
+      '<a class="lien-carte" href="#/depannage"><span class="ico" aria-hidden="true">🛠️</span>Ça ne marche pas ? (dépannage)</a>' +
+      '<a class="lien-carte" href="#/preparer"><span class="ico" aria-hidden="true">🎒</span>Préparer l\'appareil</a>' +
       '<a class="lien-carte" href="#/bases"><span class="ico" aria-hidden="true">📖</span>Comprendre ouverture, vitesse et ISO</a>' +
       '<a class="lien-carte" href="#/installer"><span class="ico" aria-hidden="true">📲</span>Installer l\'app sur l\'iPhone</a>' +
       '<section class="section"><h2 class="section-titre">À propos</h2>' +
@@ -502,21 +602,28 @@
 
   function vueBoutons() {
     var reperes = [
-      ['1', 'Molette des modes', 'Dessus, à droite. Icônes : tête de profil = Portrait, montagnes = Paysage, personnage qui court = Sports, éclair barré = Flash annulé, CA = Créatif auto, et Tv.'],
+      ['1', 'Molette des modes', 'Dessus, à droite. Icônes : A+ = tout automatique, tête de profil = Portrait, montagnes = Paysage, fleur = Gros-plan, personnage qui court = Sports, éclair barré = Flash annulé, CA = Créatif auto, et Tv.'],
       ['2', 'Interrupteur ON / OFF', 'Dessus, à droite, à côté de la molette des modes.'],
       ['3', 'Déclencheur', 'Dessus, à droite, sous ton index. À moitié = mise au point, à fond = photo.'],
       ['4', 'Molette principale', 'Dessus, juste derrière le déclencheur. Elle change la valeur affichée.'],
-      ['5', 'Boutons ISO et DISP.', 'Dessus, derrière la molette principale. DISP. allume ou éteint l\'écran des réglages.'],
-      ['6', 'Bouton Q', 'Au dos, collé au bord droit de l\'écran, juste sous le bouton Av. Marqué « Q » avec une petite imprimante. Ouvre l\'écran de réglage rapide (utilisé en mode CA).'],
-      ['7', 'Croix + SET', 'Au dos, à droite. SET au centre valide. La flèche gauche règle le retardateur.'],
-      ['8', 'Bouton lecture ▶', 'Au dos, collé au bord droit de l\'écran, en bas. Pour revoir tes photos.']
+      ['5', 'Boutons ISO et DISP.', 'Dessus, derrière la molette principale. DISP. allume ou éteint l\'écran des réglages.']
     ];
     var html = '<div class="intro"><h2>Les boutons du 600D</h2><p>Les repères utilisés dans les étapes.</p></div>' +
-      schemaAppareil() + '<ul class="liste-aide">';
+      '<h2 class="section-titre">Le dessus</h2>' + schemaAppareil() + '<ul class="liste-aide">';
     reperes.forEach(function (r) {
       html += '<li><strong>' + r[0] + '. ' + esc(r[1]) + '</strong><span>' + esc(r[2]) + '</span></li>';
     });
     html += '<li><strong>Sur l\'objectif (côté gauche)</strong><span>Interrupteur AF/MF : toujours sur AF. Interrupteur STABILIZER : sur ON. La large bague en caoutchouc règle le zoom (17 à 85).</span></li></ul>' +
+      '<h2 class="section-titre section">Le dos</h2>' + schemaDos() + '<ul class="liste-aide">' +
+      [['A', 'MENU', 'En haut à gauche. Ouvre les menus (réglages avancés, signal sonore…).'],
+        ['B', 'INFO.', 'À côté de MENU. Change les informations affichées à l\'écran.'],
+        ['H', 'Correcteur dioptrique', 'Petite molette juste à droite du viseur : rend le viseur net pour ta vue.'],
+        ['C', 'Av ±', 'Collé au bord droit de l\'écran, en haut. Pas utilisé dans l\'app.'],
+        ['D', 'Q (réglage rapide)', 'Juste sous Av, marqué « Q » et une petite imprimante. Sert en mode CA et pour les ambiances.'],
+        ['E', 'Croix + SET', 'À droite de Q. Flèche gauche = retardateur. SET au centre valide.'],
+        ['F', 'Lecture ▶', 'Collé au bord droit de l\'écran, en bas. Pour revoir tes photos.'],
+        ['G', 'Loupe', 'En haut à droite. Zoome dans une photo en lecture.']
+      ].map(function (r) { return '<li><strong>' + r[0] + '. ' + esc(r[1]) + '</strong><span>' + esc(r[2]) + '</span></li>'; }).join('') + '</ul>' +
       '<section class="section"><h2 class="section-titre">Lire le bas du viseur</h2>' +
       '<table class="table-lecture"><thead><tr><th>Position</th><th>Ce que c\'est</th></tr></thead><tbody>' +
       '<tr><td>1er nombre à gauche</td><td>La <b>vitesse</b>. <span class="kbd">250</span> = 1/250 s, <span class="kbd">30</span> = 1/30 s, <span class="kbd">4"</span> = 4 secondes. S\'il clignote : risque de flou.</td></tr>' +
@@ -582,6 +689,99 @@
     cadre({ titre: 'Installation', retour: '#/aide', onglet: 'aide', html: html });
   }
 
+  // ---------- Photo express (mode Scène intelligente auto) ----------
+
+  var cochesExpress = {};
+  function vueExpress() {
+    var etapes = [
+      { titre: 'Allume l\'appareil', ou: 'Interrupteur <b>sur le dessus, à droite</b> : mets-le sur <span class="kbd">ON</span>.', aide: AIDE.allumage },
+      { titre: 'Molette des modes sur A+', ou: 'Tourne la <b>grande molette sur le dessus, à droite</b> jusqu\'à l\'icône <b>A+</b> (petit cadre avec un A et un +).', voir: 'L\'appareil analyse la scène et règle tout seul, flash compris.', aide: AIDE.molette },
+      { titre: 'Cadre avec le zoom', ou: 'Tourne la <b>large bague en caoutchouc</b> : vers <b>85</b> pour te rapprocher du sujet, vers <b>17</b> pour en voir plus.', aide: AIDE.zoom },
+      { titre: 'Vise et appuie à moitié', ou: 'Place le sujet <b>au centre du viseur</b> et appuie <b>à moitié</b> sur le déclencheur.', voir: 'Un « bip » et le <b>point vert</b> en bas à droite du viseur : c\'est net.', aide: AIDE.miseAuPoint },
+      { titre: 'Appuie à fond', ou: 'Appuie <b>doucement à fond</b>, sans donner de coup.', voir: 'La photo s\'affiche 2 secondes à l\'écran.', aide: AIDE.declenchement },
+      { titre: 'Vérifie', ou: 'Bouton lecture <span class="kbd">▶</span> : au dos, collé au bord droit de l\'écran, en bas.', aide: AIDE.resultat.slice(0, 2) }
+    ];
+    var html = '<div class="intro"><h2>Photo express</h2><p>Pas le temps de choisir un effet ? L\'appareil fait tout, tu cadres et tu déclenches.</p></div>' +
+      htmlEtapes('6 gestes', etapes, cochesExpress) +
+      '<p class="encart info"><strong>Le flash sort tout seul ?</strong>C\'est normal en mode A+ quand il fait sombre. Pour garder l\'ambiance sans flash, choisis le style « Nuit / peu de lumière ».</p>' +
+      '<div class="section"><a class="bouton secondaire" href="#/">Choisir un effet précis</a></div>';
+    cadre({ titre: 'Photo express', retour: '#/', onglet: 'styles', html: html });
+    brancherEtapes(etapes, cochesExpress, vueExpress);
+  }
+
+  // ---------- Préparer l'appareil (avant une sortie) ----------
+
+  var cochesPreparer = {};
+  function vuePreparer() {
+    var etapes = [
+      { titre: 'Batterie chargée', ou: 'Allume l\'appareil et regarde l\'<b>icône batterie</b> sur l\'écran : 3 barres = OK. Si elle clignote, recharge-la avec le chargeur.', voir: 'Une charge complète donne environ 550 photos sans flash (manuel p.33).', aide: AIDE.allumage.slice(0, 1) },
+      { titre: 'Carte mémoire en place', ou: 'La carte SD est dans la trappe sur le <b>côté droit</b> (côté poignée). Le petit taquet sur le côté de la carte doit être <b>vers le haut</b> (pas sur LOCK).', voir: 'L\'écran affiche le nombre de photos possibles (en bas à droite).', aide: AIDE.declenchement.slice(1, 3) },
+      { titre: 'Objectif prêt', ou: 'Sur le <b>côté gauche de l\'objectif</b> : <span class="kbd">AF/MF</span> sur <b>AF</b> et <span class="kbd">STABILIZER</span> sur <b>ON</b>.', voir: 'Sur MF, la mise au point automatique ne marche pas : c\'est la première cause de photos floues.' },
+      { titre: 'ISO sur AUTO', ou: 'Mets la molette des modes sur <b>Tv</b>. Appuie sur <span class="kbd">ISO</span> (dessus), tourne la molette principale jusqu\'à <b>AUTO</b>, puis <span class="kbd">SET</span>.', voir: 'Utile pour le panoramique filé et le filé d\'eau. Dans les modes à icônes, l\'ISO est toujours automatique.', aide: AIDE.vitesseTv.slice(1) },
+      { titre: 'Photo par photo', ou: 'Au dos, <b>flèche gauche de la croix</b> → choisis le <b>rectangle simple</b> (vue par vue) → <span class="kbd">SET</span>.', voir: 'Le retardateur reste réglé même quand on change de mode : cette vérification évite une attente surprise de 10 secondes.' },
+      { titre: 'Viseur net pour ta vue', ou: 'Regarde dans le viseur et tourne la <b>petite molette juste à droite du viseur</b> (correcteur dioptrique) jusqu\'à ce que les petits carrés soient bien nets.', voir: 'Réglage à faire une seule fois (manuel p.39). Sans lui, tu crois que la photo est floue alors qu\'elle est nette.' }
+    ];
+    var html = '<div class="intro"><h2>Préparer l\'appareil</h2><p>À vérifier avant une sortie photo. Ensuite, chaque guide va droit au but.</p></div>' +
+      htmlEtapes('Check-list', etapes, cochesPreparer) +
+      '<div class="encart info"><strong>Bien tenir l\'appareil (manuel p.39)</strong><ul class="astuces">' +
+      '<li>Main droite autour de la poignée, main gauche sous l\'objectif.</li>' +
+      '<li>Coudes serrés contre le corps, un pied légèrement devant l\'autre.</li>' +
+      '<li>L\'appareil appuyé contre le visage, l\'œil au viseur.</li></ul></div>';
+    cadre({ titre: 'Préparer l\'appareil', retour: '#/', onglet: 'styles', html: html });
+    brancherEtapes(etapes, cochesPreparer, vuePreparer);
+  }
+
+  // ---------- Dépannage (source : guide de dépannage du manuel, p.278-287) ----------
+
+  function vueDepannage() {
+    var groupes = [
+      ['Allumage et écran', AIDE.allumage],
+      ['Mise au point', AIDE.miseAuPoint],
+      ['Le déclencheur ne marche pas', AIDE.declenchement],
+      ['Flash et lumière', [
+        ['Le flash sort tout seul', 'Normal dans les modes A+, Portrait, Gros-plan et Portrait de nuit quand il fait sombre (manuel p.282). Pour l\'éviter : style « Nuit / peu de lumière » (mode Flash annulé).'],
+        ['La vitesse clignote dans le viseur', AIDE.clignoteVitesse[0][1]]
+      ]],
+      ['Après la photo', AIDE.resultat],
+      ['Viseur', [
+        ['Tout est flou dans le viseur', 'Tourne la petite molette juste à droite du viseur (correcteur dioptrique) jusqu\'à ce que les petits carrés soient nets.']
+      ]],
+      ['Message « Err » sur l\'écran', [
+        ['Err 01', 'Mauvais contact avec l\'objectif : nettoie délicatement les contacts dorés de l\'objectif et de l\'appareil, puis remonte l\'objectif.'],
+        ['Err 02', 'Problème de carte : retire-la et remets-la, ou change de carte.'],
+        ['Err 04', 'Carte pleine : efface des photos ou change de carte.'],
+        ['Err 05', 'Flash bloqué : éteins puis rallume l\'appareil.'],
+        ['Autre numéro', 'Éteins, retire la batterie, remets-la et rallume. Si ça persiste, note le numéro pour le SAV Canon.']
+      ]]
+    ];
+    var html = '<div class="intro"><h2>Ça ne marche pas ?</h2><p>Les problèmes les plus courants et leur solution, d\'après le guide de dépannage du mode d\'emploi Canon.</p></div>';
+    groupes.forEach(function (g) {
+      html += '<section class="section"><h2 class="section-titre">' + esc(g[0]) + '</h2><ul class="liste-aide">' +
+        g[1].map(function (a) { return '<li><strong>' + esc(a[0]) + '</strong><span>' + esc(a[1]) + '</span></li>'; }).join('') + '</ul></section>';
+    });
+    cadre({ titre: 'Dépannage', retour: '#/aide', onglet: 'aide', html: html });
+  }
+
+  // Schéma simplifié du dos (d'après le manuel p.19) : repères A à G
+  function schemaDos() {
+    function rep(n, x, y) { return '<circle class="repere" cx="' + x + '" cy="' + y + '" r="11"/><text class="repere-txt" x="' + x + '" y="' + (y + 4.5) + '" text-anchor="middle">' + n + '</text>'; }
+    return '<svg class="schema" viewBox="0 0 340 200" role="img" aria-label="Schéma du dos de l\'appareil">' +
+      '<text x="170" y="16" text-anchor="middle">Vu de dos (côté écran)</text>' +
+      '<rect class="corps" x="14" y="26" width="312" height="160" rx="18"/>' +
+      '<rect class="piece" x="140" y="32" width="56" height="30" rx="6"/><text x="168" y="52" text-anchor="middle">viseur</text>' +
+      '<circle class="piece" cx="208" cy="44" r="6"/>' +
+      '<rect class="piece" x="30" y="70" width="176" height="106" rx="6"/><text x="118" y="128" text-anchor="middle">écran</text>' +
+      '<rect class="piece" x="36" y="38" width="30" height="12" rx="4"/><rect class="piece" x="76" y="38" width="30" height="12" rx="4"/>' +
+      '<circle class="piece" cx="274" cy="44" r="8"/><circle class="piece" cx="300" cy="44" r="8"/>' +
+      '<rect class="piece" x="214" y="76" width="22" height="16" rx="4"/>' +
+      '<rect class="piece" x="214" y="100" width="22" height="16" rx="4"/>' +
+      '<circle class="piece" cx="272" cy="126" r="26"/><circle class="piece" cx="272" cy="126" r="10"/><text x="272" y="130" text-anchor="middle" style="font-size:9px">SET</text>' +
+      '<rect class="piece" x="214" y="156" width="22" height="16" rx="4"/>' +
+      '<rect class="piece" x="290" y="160" width="20" height="14" rx="4"/>' +
+      rep('A', 51, 30) + rep('B', 91, 30) + rep('C', 225, 84) + rep('D', 204, 108) + rep('E', 304, 104) + rep('F', 225, 164) + rep('G', 300, 64) + rep('H', 222, 34) +
+      '</svg>';
+  }
+
   function vueIntrouvable() {
     cadre({ titre: 'PhotoAssist', retour: '#/', onglet: 'styles', html: '<div class="vide"><div class="ico">🤔</div><h2>Page introuvable</h2><a class="bouton" href="#/">Retour aux styles</a></div>' });
   }
@@ -599,6 +799,9 @@
     if (p[0] === 'boutons') return vueBoutons();
     if (p[0] === 'bases') return vueBases();
     if (p[0] === 'installer') return vueInstaller();
+    if (p[0] === 'express') return vueExpress();
+    if (p[0] === 'preparer') return vuePreparer();
+    if (p[0] === 'depannage') return vueDepannage();
     vueIntrouvable();
   }
 

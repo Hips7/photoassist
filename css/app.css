@@ -327,3 +327,37 @@ body.theme-nuit .toast { background: #2A0604; color: var(--texte); }
   .carte-style.large img { aspect-ratio: 4 / 3; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* ---------- Raccourcis accueil ---------- */
+.raccourcis { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+.raccourci {
+  display: flex; flex-direction: column; gap: 2px;
+  padding: 14px; border-radius: var(--rayon);
+  background: var(--surface); border: 1px solid var(--bordure);
+  color: var(--texte); text-decoration: none; box-shadow: var(--ombre);
+}
+.raccourci .ico { font-size: 26px; line-height: 1; margin-bottom: 4px; }
+.raccourci strong { font-size: 17px; }
+.raccourci small { font-size: 16px; color: var(--texte-2); line-height: 1.3; }
+.raccourci.express { background: var(--accent); border-color: var(--accent); color: var(--accent-texte); }
+.raccourci.express small { color: inherit; opacity: .9; }
+
+/* ---------- Bulle « ça ne marche pas ? » ---------- */
+.aide-etape { margin-top: 8px; }
+.aide-etape summary {
+  display: inline-flex; align-items: center; gap: 8px;
+  min-height: 44px; padding: 0 12px 0 6px; border-radius: 999px;
+  color: var(--accent); font-size: 16px; font-weight: 650; cursor: pointer; list-style: none;
+}
+.aide-etape summary::-webkit-details-marker { display: none; }
+.aide-etape summary span {
+  display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%;
+  border: 2px solid var(--accent); font-weight: 800;
+}
+.aide-etape[open] summary span { background: var(--accent); color: var(--accent-texte); }
+.aide-etape ul { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 8px; }
+.aide-etape li { padding: 10px 12px; border-radius: 10px; background: var(--alerte-doux); font-size: 16px; }
+.aide-etape li b { display: block; }
+
+ul.astuces { margin: 4px 0 0; padding-left: 20px; }
+ul.astuces li + li { margin-top: 6px; }

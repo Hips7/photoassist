@@ -1,6 +1,6 @@
 // Service Worker PhotoAssist : fonctionnement hors-ligne.
 // À CHAQUE modification de l'app : augmenter VERSION, sinon l'iPhone garde l'ancienne version.
-var VERSION = 'v5';
+var VERSION = 'v6';
 var CACHE = 'photoassist-' + VERSION;
 var FICHIERS = [
   './',
@@ -18,7 +18,9 @@ var FICHIERS = [
   'img/styles/panning.jpg',
   'img/styles/sport.jpg',
   'img/styles/nuit.jpg',
-  'img/styles/eau.jpg'
+  'img/styles/eau.jpg',
+  'img/styles/gros_plan.jpg',
+  'img/styles/noir_blanc.jpg'
 ];
 
 self.addEventListener('install', function (e) {

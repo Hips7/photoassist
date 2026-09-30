@@ -20,6 +20,8 @@ Ce fichier prime sur les CDC en cas de conflit.
 | Modes utilisés | **Modes intégrés de la molette** : Portrait (fond flou), CA réglé sur « net » (portrait net), Paysage, Sports (action figée), Flash annulé (nuit). **Tv + ISO AUTO** seulement pour panoramique filé et filé d'eau (pas de mode dédié). Av et M non utilisés. | Retour terrain : le guide Av/ISO manuel était trop long et échouait en faible lumière (vitesse 1/15). Les modes intégrés gèrent ISO et flash seuls. Contrepartie : le triplet ouverture/vitesse/ISO n'est plus affiché pour ces styles (écart assumé au CDC §1). |
 | Versioning SW (CDC v1.1 §9) | Simplifié | `reglages.json` en « réseau d'abord, cache si hors-ligne » ; le reste en cache avec numéro de version dans `sw.js`. |
 | Export/import JSON des favoris | Reporté en v2 | Risque ITP faible si l'app est ouverte depuis l'écran d'accueil. |
+| Styles ajoutés (v3) | **Gros-plan** (mode fleur, sujet « fleur ou petit objet ») et **Noir & blanc** (ambiance Monochrome via Q, en mode Portrait ou Paysage selon le sujet). | Fonctions intégrées du 600D (manuel p.61, p.65-66), aucune valeur à régler. |
+| Aides (v3) | Bulle « Ça ne marche pas ? » sur chaque étape, écrans Photo express (mode A+), Préparer l'appareil, Dépannage, schéma du dos, astuces du manuel par style. | Retour terrain : utiliser tout le mode d'emploi. Contenu tiré du guide de dépannage p.278-287. |
 | Photos des vignettes | Photos libres de droits (Unsplash / Pexels) | Crédit photographe affiché. À remplacer par ses propres photos plus tard si souhaité. |
 
 ## Table de compatibilité style → sujets

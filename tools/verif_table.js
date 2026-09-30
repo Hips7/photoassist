@@ -12,7 +12,7 @@ const VITESSES_600D = ['1/4000','1/3200','1/2500','1/2000','1/1600','1/1250','1/
 // Ouverture max du 17-85 selon la focale (valeur la plus petite possible)
 const OUV_MAX = { 17: 4, 24: 4.5, 35: 5, 50: 5.6, 85: 5.6 };
 const OUV_MIN = 22;
-const MODES_SCENE = ['portrait', 'ca', 'paysage', 'sports', 'flash_annule'];
+const MODES_SCENE = ['portrait', 'ca', 'paysage', 'sports', 'flash_annule', 'gros_plan', 'auto'];
 
 const secondes = v => v.includes('/') ? 1 / Number(v.split('/')[1]) : Number(v);
 
@@ -23,7 +23,11 @@ const situIds = new Set(data.situations.map(s => s.id));
 const stylesIds = new Set(data.styles.map(s => s.id));
 const modesIds = new Set(data.modes.map(m => m.id));
 
-for (const s of data.styles) if (!modesIds.has(s.modeAppareil)) erreurs.push(`Mode appareil inconnu pour ${s.id}`);
+for (const s of data.styles) {
+  if (!modesIds.has(s.modeAppareil)) erreurs.push(`Mode appareil inconnu pour ${s.id}`);
+  if (!s.astuces || !s.astuces.length) erreurs.push(`Astuces manquantes pour ${s.id}`);
+  if (!fs.existsSync(path.join(__dirname, '..', s.image))) erreurs.push(`Image manquante pour ${s.id}`);
+}
 
 for (const r of data.regles) {
   const cle = `${r.style}+${r.situation}+${r.sujet}`;
@@ -44,7 +48,8 @@ for (const r of data.regles) {
   if (!r.conseil) erreurs.push(`Conseil manquant : ${cle}`);
   if (/f\/\d|1\/\d{3}/.test(r.conseil)) erreurs.push(`Conseil cite une valeur fixe (ouverture/vitesse) : ${cle}`);
 
-  const mode = style && style.modeAppareil;
+  if (r.mode && !modesIds.has(r.mode)) erreurs.push(`Mode inconnu ${r.mode} : ${cle}`);
+  const mode = r.mode || (style && style.modeAppareil);
   if (MODES_SCENE.includes(mode)) {
     // Modes automatiques : l'appareil règle tout, aucune valeur ne doit être imposée
     if (r.vitesse || r.iso || r.ouverture) erreurs.push(`Valeur imposée en mode automatique : ${cle}`);
